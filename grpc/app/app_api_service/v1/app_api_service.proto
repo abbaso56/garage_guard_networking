@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package app_api_service.v1;
+
+option go_package ="garage_guard/proto/gen/app_api_service/v1;appApiServicev1";
+
+service AppApiService{
+    //check connection
+    rpc ConnectionCheck(ConnectionCheckRequest) returns (ConnectionCheckResponse){}
+
+    // Creates a new user
+    rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse){}
+
+
+    // Signs in given the required credintials
+    rpc SignIn(SignInRequest) returns (SignInResponse){}
+    
+
+    // Adds a new garage where the user can register a device and cars
+    // The user that created the garage is registered as the admin
+    rpc NewGarage(NewGarageRequest) returns (NewGarageResponse){}
+
+    
+    // Registers a device to the garage
+    //rpc NewGarageDevice(NewGarageDeviceRequest) streams (NewGarageDeviceResponse){}
+
+
+    // Gets the Garages that are registered to the user
+    rpc GetGarages(GetGaragesRequest) returns (GetGaragesResponse){}
+
+    // Get cars registered to a garage
+    //rpc GetCarsInGarage(GetCarsInGarageRequest) returns (GetCarsInGarageResponse){}
+
+    // Get device id form garage
+    //rpc GetGarageDevice(GetGarageDeviceRequest) returns (GetGarageDeviceResponse){}
+
+    // Grants garage access to another user
+
+    // rpc AddUserToGarage(AddUserToGarageRequest) returns (AddUserToGarageResponse){}
+   
+}
+//-------------------------------------
+// ConnectionCheck
+
+// Message is through headers(eg: rrt timestamps) and handled by intercepters
+message ConnectionCheckRequest{}
+
+message ConnectionCheckResponse{}
+
+
+//-------------------------------------
+// RegisterUser
+
+// Request sent to server includes the username and password
+message RegisterUserRequest{
+    string username = 1;
+    string password = 2;
+}
+
+ 
+// Response from server with a jwt token for the authenticated session
+message RegisterUserResponse{
+    bytes jwt = 1;
+}
+
+
+//-------------------------------------
+// SignIn
+
+// User sends credintials for authentication
+message SignInRequest{
+    string username = 1;
+    string password = 2;
+}
+
+
+// Server validates user and then sends a token for the authenticated session
+message SignInResponse{
+    bytes jwt = 1;
+}
+
+//-------------------------------------
+// NewGarage
+
+// Creates a new garage resource with the user that created the garage being the admin
+message NewGarageRequest{
+    string garage_name = 1; 
+}
+
+// Responds to the garage request to indicate the status of the request
+
+message NewGarageResponse{
+}
+
+//-------------------------------------
+// GetGarages
+
+message GetGaragesRequest{
+
+}
+
+message Garage{
+    string garage_name = 1;
+}
+
+message GetGaragesResponse{
+    repeated Garage garages = 1; 
+}
+
+//-------------------------------------
