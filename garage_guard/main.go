@@ -47,7 +47,7 @@ func main() {
 		log.Fatal("failed to read cert")
 	}
 
-	keyPem, err := os.ReadFile("usr/server_tls/srv_private.key")
+	keyPem, err := os.ReadFile("usr/server_tls/srv.key")
 	if err != nil {
 		log.Fatal("failed to read key")
 	}

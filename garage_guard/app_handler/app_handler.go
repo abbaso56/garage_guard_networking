@@ -39,7 +39,7 @@ func (appSrv *AppHandler) RegisterUser(ctx context.Context, req *connect.Request
 
 	timeNow := time.Now().UTC()
 
-	// Creates a new row rntey for the user
+	// Creates a new row entey for the user
 	_, err = appSrv.DataQuery.CreateUser(ctx, db.CreateUserParams{
 		ID:        helpers.PgUuid(id),
 		Username:  req.Msg.Username,
@@ -63,9 +63,13 @@ func (appSrv *AppHandler) RegisterUser(ctx context.Context, req *connect.Request
 	}
 
 	// Creates Jwt for future auth
+	//FIX-----------------------------------------------------------
+
 	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{
 		Jwt: respJwt,
 	})
+	//FIX-----------------------------------------------------------
+	resp.Header().Add("jwt", string(respJwt))
 	return resp, nil
 }
 
@@ -92,9 +96,13 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 	}
 
 	//responds with JWT
+	//FIX-----------------------------------------------------------
+
 	resp := connect.NewResponse(&appApiServicev1.SignInResponse{
 		Jwt: respJwt,
 	})
+	//FIX-----------------------------------------------------------
+	resp.Header().Add("jwt", string(respJwt))
 
 	return resp, nil
 

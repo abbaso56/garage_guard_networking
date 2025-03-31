@@ -9,4 +9,7 @@ class NetworkNewIp extends NetworkEvent{
 }
 
 class NetworkConnecionCheck extends NetworkEvent{}
+class NetworkRegisterUser extends  NetworkEvent{}
+
+class NetworkSignIn extends NetworkEvent{}
 

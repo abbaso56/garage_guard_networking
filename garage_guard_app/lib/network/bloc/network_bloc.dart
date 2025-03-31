@@ -9,15 +9,24 @@ import 'package:connectrpc/protocol/grpc.dart' as protocol;
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.client.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.spec.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.pb.dart';
+import 'package:garage_guard_app/network/intercept/token_interceptor.dart';
 
 part 'network_event.dart';
 part 'network_state.dart';
+const defUrl = "https://172.23.240.1:443";
+
+
+final List<Interceptor> interceptList= [
+  TokenIntercepter().tokenHandler,
+];
+
+
 
 class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
-  var _bUrl = "https://localhost:443";
+  var _bUrl = defUrl;
   final HttpClient clientinfo ;
   
-  
+  var connected = "disconnected";
   String get bUrl => _bUrl;
 
   AppApiServiceClient appClient;
@@ -26,7 +35,8 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     baseUrl: newBaseUrl,
     codec: const ProtoCodec(), 
     httpClient:  clientinfo,
-    statusParser: const StatusParser()
+    statusParser: const StatusParser(),
+    interceptors: interceptList,
     );
 
     appClient = AppApiServiceClient(transport);
@@ -37,28 +47,29 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
 
 
-  @override
-  void onChange(Change<NetworkState> change) {
-      log("$change");
-      super.onChange(change);
-  }
+  // @override
+  // void onChange(Change<NetworkState> change) {
+  //     log("$change");
+  //     super.onChange(change);
+  // }
 
 
 
 
 
 
-
+  
 
 
 
 
   NetworkBloc({required this.clientinfo}) : 
-   appClient = AppApiServiceClient(protocol.Transport(
-    baseUrl: "https://localhost:443",
+    appClient = AppApiServiceClient(protocol.Transport(
+    baseUrl: defUrl,
     codec: const ProtoCodec(), 
     httpClient:  clientinfo,
-    statusParser: const StatusParser())),
+    statusParser: const StatusParser(),
+    interceptors: interceptList)),
   
   
   
@@ -82,19 +93,23 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       
       final req = appClient.connectionCheck(ConnectionCheckRequest());
       emit(NetworkConnecionCheckRequestState());
-
+      connected = "connecting";
       await req;
+      connected = "Connected";
       emit(NetworkConnecionCheckResponseState());
       emit(NetworkBaseState());
     });
   }
 
 
+  
+
+
 
 
   
 
-
+  
 
 
  

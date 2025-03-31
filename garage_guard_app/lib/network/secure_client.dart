@@ -6,13 +6,17 @@ import 'package:flutter/services.dart';
 
 
 Future<HttpClient> secureClient () async{
-  // Create security context using CA root certificate
-  final cntxt= SecurityContext(withTrustedRoots: true);
+  // Don;t automaticall trust the client just because the certificate is a tusted root
+  final cntxt= SecurityContext.defaultContext;
 
-  final  crt = await rootBundle.load('assets/rootCA.crt');
+  final  ca = await rootBundle.load('assets/rootCA.crt');
+  final  srv = await rootBundle.load('assets/srv.crt');
 
-  cntxt.setTrustedCertificatesBytes(crt.buffer.asUint8List());
+  cntxt.setTrustedCertificatesBytes(ca.buffer.asUint8List());
+  cntxt.useCertificateChainBytes(srv.buffer.asUint8List());
 
+
+  
   
   
   //create secure client using context

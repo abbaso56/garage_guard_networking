@@ -14,3 +14,8 @@ final class NetworkNewIpState extends NetworkState{}
 final class NetworkConnecionCheckRequestState extends NetworkState{}
 
 final class NetworkConnecionCheckResponseState extends NetworkState{}
+
+final class NetworkSignInRequestState extends NetworkState{}
+
+final class NetworkSignInResponseState extends NetworkState{}
+

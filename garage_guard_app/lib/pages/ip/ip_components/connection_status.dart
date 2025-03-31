@@ -6,20 +6,14 @@ import 'package:garage_guard_app/network/bloc/network_bloc.dart';
 
 
 class ConnectionStatus extends StatelessWidget {
-  final  msg = ConnectionStatusMsg();
+
   ConnectionStatus({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocSelector<NetworkBloc,NetworkState,String>(
     selector:(state){
-      if (state is NetworkConnecionCheckRequestState){
-        msg.text = "Connecting";
-      }
-      else if (state is NetworkConnecionCheckResponseState){
-        msg.text = "Connected";
-      }
-      return msg.text;
+      return context.read<NetworkBloc>().connected;
     } , 
     builder: (context, text){
       return Text(text);
