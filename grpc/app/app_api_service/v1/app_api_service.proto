@@ -60,7 +60,6 @@ message RegisterUserRequest{
  
 // Response from server with a jwt token for the authenticated session
 message RegisterUserResponse{
-    bytes jwt = 1;
 }
 
 
@@ -76,7 +75,6 @@ message SignInRequest{
 
 // Server validates user and then sends a token for the authenticated session
 message SignInResponse{
-    bytes jwt = 1;
 }
 
 //-------------------------------------
@@ -96,11 +94,11 @@ message NewGarageResponse{
 // GetGarages
 
 message GetGaragesRequest{
-
 }
 
 message Garage{
     string garage_name = 1;
+    bytes id = 2;
 }
 
 message GetGaragesResponse{

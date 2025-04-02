@@ -43,3 +43,36 @@ func (q *Queries) CreateGargeUserRelation(ctx context.Context, arg CreateGargeUs
 	)
 	return i, err
 }
+
+const getGarageNamesByuserId = `-- name: GetGarageNamesByuserId :many
+SELECT garages.garage_name, garages.id
+FROM garages 
+INNER JOIN garages_users ON garages.id = garages_users.garage_id
+WHERE garages_users.user_id = $1
+ORDER BY garages.garage_name
+`
+
+type GetGarageNamesByuserIdRow struct {
+	GarageName string
+	ID         pgtype.UUID
+}
+
+func (q *Queries) GetGarageNamesByuserId(ctx context.Context, userID pgtype.UUID) ([]GetGarageNamesByuserIdRow, error) {
+	rows, err := q.db.Query(ctx, getGarageNamesByuserId, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetGarageNamesByuserIdRow
+	for rows.Next() {
+		var i GetGarageNamesByuserIdRow
+		if err := rows.Scan(&i.GarageName, &i.ID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

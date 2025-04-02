@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garage_guard_app/network/bloc/network_bloc.dart';
 import 'package:garage_guard_app/network/secure_client.dart';
+import 'package:garage_guard_app/pages/logged_in/add_device/add_device_page.dart';
+import 'package:garage_guard_app/pages/logged_in/add_garage/add_garage_page.dart';
+import 'package:garage_guard_app/pages/logged_in/home/home_page.dart';
 import 'package:garage_guard_app/pages/ip/ip_resolution_page.dart';
 import 'package:garage_guard_app/pages/sign_in/sign_in_page.dart';
-import 'package:garage_guard_app/pages/register_user/Presentation/register_user_page.dart';
+import 'package:garage_guard_app/pages/register_user/register_user_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +34,11 @@ class MyApp extends StatelessWidget {
           "/register_user": (context) => RegisterUserPage(),
           "/sign_in": (context) => SignInPage(),
           "/ip_resolution": (context) => IpResolutionPage(),
+
+          // Signed in routes
+          "/home_screen": (context) => HomePage(),
+          "/add_garage": (context) => AddGaragePage(),
+          "/add_device": (context) =>  AddDevicePage(),
         },
       ),
     );

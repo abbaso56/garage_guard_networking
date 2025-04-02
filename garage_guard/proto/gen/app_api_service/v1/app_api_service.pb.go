@@ -150,7 +150,6 @@ func (x *RegisterUserRequest) GetPassword() string {
 // Response from server with a jwt token for the authenticated session
 type RegisterUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Jwt           []byte                 `protobuf:"bytes,1,opt,name=jwt,proto3" json:"jwt,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -183,13 +182,6 @@ func (x *RegisterUserResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RegisterUserResponse.ProtoReflect.Descriptor instead.
 func (*RegisterUserResponse) Descriptor() ([]byte, []int) {
 	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *RegisterUserResponse) GetJwt() []byte {
-	if x != nil {
-		return x.Jwt
-	}
-	return nil
 }
 
 // User sends credintials for authentication
@@ -248,7 +240,6 @@ func (x *SignInRequest) GetPassword() string {
 // Server validates user and then sends a token for the authenticated session
 type SignInResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Jwt           []byte                 `protobuf:"bytes,1,opt,name=jwt,proto3" json:"jwt,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -281,13 +272,6 @@ func (x *SignInResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SignInResponse.ProtoReflect.Descriptor instead.
 func (*SignInResponse) Descriptor() ([]byte, []int) {
 	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *SignInResponse) GetJwt() []byte {
-	if x != nil {
-		return x.Jwt
-	}
-	return nil
 }
 
 // Creates a new garage resource with the user that created the garage being the admin
@@ -410,6 +394,7 @@ func (*GetGaragesRequest) Descriptor() ([]byte, []int) {
 type Garage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GarageName    string                 `protobuf:"bytes,1,opt,name=garage_name,json=garageName,proto3" json:"garage_name,omitempty"`
+	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -449,6 +434,13 @@ func (x *Garage) GetGarageName() string {
 		return x.GarageName
 	}
 	return ""
+}
+
+func (x *Garage) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
 }
 
 type GetGaragesResponse struct {
@@ -504,22 +496,21 @@ const file_app_api_service_v1_app_api_service_proto_rawDesc = "" +
 	"\x17ConnectionCheckResponse\"M\n" +
 	"\x13RegisterUserRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"(\n" +
-	"\x14RegisterUserResponse\x12\x10\n" +
-	"\x03jwt\x18\x01 \x01(\fR\x03jwt\"G\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x16\n" +
+	"\x14RegisterUserResponse\"G\n" +
 	"\rSignInRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\"\n" +
-	"\x0eSignInResponse\x12\x10\n" +
-	"\x03jwt\x18\x01 \x01(\fR\x03jwt\"3\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x10\n" +
+	"\x0eSignInResponse\"3\n" +
 	"\x10NewGarageRequest\x12\x1f\n" +
 	"\vgarage_name\x18\x01 \x01(\tR\n" +
 	"garageName\"\x13\n" +
 	"\x11NewGarageResponse\"\x13\n" +
-	"\x11GetGaragesRequest\")\n" +
+	"\x11GetGaragesRequest\"9\n" +
 	"\x06Garage\x12\x1f\n" +
 	"\vgarage_name\x18\x01 \x01(\tR\n" +
-	"garageName\"J\n" +
+	"garageName\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\"J\n" +
 	"\x12GetGaragesResponse\x124\n" +
 	"\agarages\x18\x01 \x03(\v2\x1a.app_api_service.v1.GarageR\agarages2\xf0\x03\n" +
 	"\rAppApiService\x12l\n" +

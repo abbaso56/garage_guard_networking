@@ -146,21 +146,12 @@ class RegisterUserRequest extends $pb.GeneratedMessage {
 
 /// Response from server with a jwt token for the authenticated session
 class RegisterUserResponse extends $pb.GeneratedMessage {
-  factory RegisterUserResponse({
-    $core.List<$core.int>? jwt,
-  }) {
-    final $result = create();
-    if (jwt != null) {
-      $result.jwt = jwt;
-    }
-    return $result;
-  }
+  factory RegisterUserResponse() => create();
   RegisterUserResponse._() : super();
   factory RegisterUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RegisterUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RegisterUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
-    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'jwt', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -184,15 +175,6 @@ class RegisterUserResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RegisterUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RegisterUserResponse>(create);
   static RegisterUserResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<$core.int> get jwt => $_getN(0);
-  @$pb.TagNumber(1)
-  set jwt($core.List<$core.int> v) { $_setBytes(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasJwt() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearJwt() => clearField(1);
 }
 
 /// User sends credintials for authentication
@@ -262,21 +244,12 @@ class SignInRequest extends $pb.GeneratedMessage {
 
 /// Server validates user and then sends a token for the authenticated session
 class SignInResponse extends $pb.GeneratedMessage {
-  factory SignInResponse({
-    $core.List<$core.int>? jwt,
-  }) {
-    final $result = create();
-    if (jwt != null) {
-      $result.jwt = jwt;
-    }
-    return $result;
-  }
+  factory SignInResponse() => create();
   SignInResponse._() : super();
   factory SignInResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SignInResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SignInResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
-    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'jwt', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -300,15 +273,6 @@ class SignInResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static SignInResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignInResponse>(create);
   static SignInResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<$core.int> get jwt => $_getN(0);
-  @$pb.TagNumber(1)
-  set jwt($core.List<$core.int> v) { $_setBytes(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasJwt() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearJwt() => clearField(1);
 }
 
 /// Creates a new garage resource with the user that created the garage being the admin
@@ -429,10 +393,14 @@ class GetGaragesRequest extends $pb.GeneratedMessage {
 class Garage extends $pb.GeneratedMessage {
   factory Garage({
     $core.String? garageName,
+    $core.List<$core.int>? id,
   }) {
     final $result = create();
     if (garageName != null) {
       $result.garageName = garageName;
+    }
+    if (id != null) {
+      $result.id = id;
     }
     return $result;
   }
@@ -442,6 +410,7 @@ class Garage extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Garage', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'garageName')
+    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -474,6 +443,15 @@ class Garage extends $pb.GeneratedMessage {
   $core.bool hasGarageName() => $_has(0);
   @$pb.TagNumber(1)
   void clearGarageName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get id => $_getN(1);
+  @$pb.TagNumber(2)
+  set id($core.List<$core.int> v) { $_setBytes(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => clearField(2);
 }
 
 class GetGaragesResponse extends $pb.GeneratedMessage {

@@ -6,6 +6,7 @@ import 'package:connectrpc/http2.dart';
 import 'package:connectrpc/protobuf.dart';
 import 'package:equatable/equatable.dart';
 import 'package:connectrpc/protocol/grpc.dart' as protocol;
+import 'package:flutter/material.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.client.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.spec.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.pb.dart';
@@ -80,7 +81,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     
     //when the button to change the ip gets clicked
     on<NetworkNewIp>((event,emit){
-      final newBaseUrl = "https://${event.newIp.replaceAll(RegExp(r"\s+\b|\b\s"), "")}:${event.newPort.replaceAll(RegExp(r"\s+\b|\b\s"), "")}";
+      final newBaseUrl = "https://${event.newIp.replaceAll(RegExp(r"\s+\b|\b\s+"), "")}:${event.newPort.replaceAll(RegExp(r"\s+\b|\b\s"), "")}";
       log(newBaseUrl);
       clientURL = newBaseUrl;
       _bUrl = newBaseUrl;
@@ -89,6 +90,8 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       emit(prevState);
     });
 
+
+    // Check connection to server
     on<NetworkConnecionCheck>((event,emit) async{
       
       final req = appClient.connectionCheck(ConnectionCheckRequest());
@@ -99,6 +102,70 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       emit(NetworkConnecionCheckResponseState());
       emit(NetworkBaseState());
     });
+
+
+    // Register user call 
+    on<NetworkRegisterUser>((event, emit) async{
+      final req  = appClient.registerUser(RegisterUserRequest(username: event.username,password:  event.password));
+      emit(NetworkRegisterUserRequestState());
+      log("registering");
+      await req;
+      log("registered");
+      emit(NetworkRegisterUserResponseState());
+      emit(NetworkLoggedInState());
+
+    });
+
+    // Sign in call
+    on<NetworkSignIn>((event, emit) async {
+      final req  = appClient.signIn(SignInRequest(username: event.username,password:  event.password));
+      emit(NetworkSignInRequestState());
+      log("Signing in");
+      await req;
+      log("Signed in");
+      emit(NetworkSignInResponseState());
+      emit(NetworkLoggedInState());
+    },);
+
+
+
+    // Get garages registerd to the account
+    on<NetworkGetGarages>((event, emit) async{
+      final req = appClient.getGarages(GetGaragesRequest());
+      emit(NetworkGetGaragesRequestState());
+      log("Getting Garages for user");
+
+
+      final resp = await req;
+      emit(NetworkGetGaragesResponseState(garages: resp.garages));
+      emit(NetworkLoggedInState());
+     
+
+    });
+
+
+    // Add a new garage  to the  list of garages for the user
+    // The user is the admin since they added the garage
+
+    on<NetworkNewGarage>((event, emit) async{
+      final req = appClient.newGarage(NewGarageRequest(garageName: event.garageName));
+      emit(NetworkNewGarageRequestState());
+
+      await req;
+      emit(NetworkNewGarageResponseState());
+
+
+      emit(NetworkLoggedInState());
+
+
+
+    });
+
+
+
+
+
+
   }
 
 
@@ -109,7 +176,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
   
 
-  
+
 
 
  

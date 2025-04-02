@@ -11,6 +11,8 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,6 +21,7 @@ var _ appApiServicev1connect.AppApiServiceHandler = (*AppHandler)(nil)
 type AppHandler struct {
 	appApiServicev1connect.UnimplementedAppApiServiceHandler
 	DataQuery *db.Queries
+	DbConn    *pgx.Conn
 }
 
 func (appSrv *AppHandler) ConnectionCheck(ctx context.Context, req *connect.Request[appApiServicev1.ConnectionCheckRequest]) (*connect.Response[appApiServicev1.ConnectionCheckResponse], error) {
@@ -65,9 +68,7 @@ func (appSrv *AppHandler) RegisterUser(ctx context.Context, req *connect.Request
 	// Creates Jwt for future auth
 	//FIX-----------------------------------------------------------
 
-	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{
-		Jwt: respJwt,
-	})
+	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{})
 	//FIX-----------------------------------------------------------
 	resp.Header().Add("jwt", string(respJwt))
 	return resp, nil
@@ -98,9 +99,7 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 	//responds with JWT
 	//FIX-----------------------------------------------------------
 
-	resp := connect.NewResponse(&appApiServicev1.SignInResponse{
-		Jwt: respJwt,
-	})
+	resp := connect.NewResponse(&appApiServicev1.SignInResponse{})
 	//FIX-----------------------------------------------------------
 	resp.Header().Add("jwt", string(respJwt))
 
@@ -109,9 +108,85 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 }
 
 func (appSrv *AppHandler) NewGarage(ctx context.Context, req *connect.Request[appApiServicev1.NewGarageRequest]) (*connect.Response[appApiServicev1.NewGarageResponse], error) {
-	return nil, nil
+
+	//read data from request
+
+	garageName := req.Msg.GarageName
+
+	id := uuid.New()
+
+	timeNow := time.Now().UTC()
+
+	//get the user add from jwt passed by the auth intercepter
+	jwtBody := ctx.Value("jwtBody").(helpers.UserJwtBody)
+	userId := jwtBody.UserId
+
+	//database transaction
+	tx, err := appSrv.DbConn.Begin(ctx)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	defer tx.Rollback(ctx)
+
+	q := appSrv.DataQuery.WithTx(tx)
+	_, err = q.CreateGarage(ctx, db.CreateGarageParams{
+		ID:         helpers.PgUuid(id),
+		GarageName: garageName,
+		DeviceID:   pgtype.UUID{Bytes: [16]byte{}, Valid: false},
+		GestureSeq: pgtype.Text{String: "", Valid: false},
+		CreatedAt:  helpers.PgTime(timeNow),
+		UpdatedAt:  helpers.PgTime(timeNow),
+		VideoUrl:   pgtype.Text{String: "", Valid: false},
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	_, err = q.CreateGargeUserRelation(ctx, db.CreateGargeUserRelationParams{
+		GarageID:  helpers.PgUuid(id),
+		UserID:    helpers.PgUuid(userId),
+		IsAdmin:   true,
+		CreatedAt: helpers.PgTime(timeNow),
+		UpdatedAt: helpers.PgTime(timeNow),
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.NewGarageResponse{})
+
+	return resp, nil
+
 }
 
 func (appSrv *AppHandler) GetGarages(ctx context.Context, req *connect.Request[appApiServicev1.GetGaragesRequest]) (*connect.Response[appApiServicev1.GetGaragesResponse], error) {
-	return nil, nil
+
+	//get the user add from jwt passed by the auth intercepter
+	jwtBody := ctx.Value("jwtBody").(helpers.UserJwtBody)
+	userId := jwtBody.UserId
+
+	// gets the garage names for th user
+	garageData, err := appSrv.DataQuery.GetGarageNamesByuserId(ctx, helpers.PgUuid(userId))
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// creates the response inputing the names into a pointer array of garage messages
+	garages := make([]*appApiServicev1.Garage, len(garageData))
+
+	for i, g := range garageData {
+		garages[i].GarageName = g.GarageName
+		garages[i].Id = g.ID.Bytes[:]
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.GetGaragesResponse{
+		Garages: garages,
+	})
+	return resp, nil
 }

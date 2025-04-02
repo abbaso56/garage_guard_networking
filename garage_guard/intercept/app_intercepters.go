@@ -27,7 +27,7 @@ func AppAuthIntercepter() connect.UnaryInterceptorFunc {
 			if jwt == "" {
 				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("missing authentication"))
 			}
-
+			//checks if the jwt is valid
 			body, err := helpers.CheckJwt([]byte(jwt))
 			if err != nil {
 				return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("incorrect authentication"))
@@ -36,6 +36,7 @@ func AppAuthIntercepter() connect.UnaryInterceptorFunc {
 			if time.Now().Compare(body.ExpiresAt) >= 0 {
 				return nil, connect.NewError(connect.CodePermissionDenied, errors.New("expired authentication"))
 			}
+			ctx = context.WithValue(ctx, "jwtBody", body)
 
 			return next(ctx, req)
 		})

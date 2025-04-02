@@ -6,10 +6,28 @@ import 'package:garage_guard_app/pages/components/decorated_text_field.dart';
 import 'package:garage_guard_app/pages/components/styled_scaffold.dart';
 import 'package:garage_guard_app/pages/ip/ip_components/connection_status.dart';
 
-class IpResolutionPage extends StatelessWidget {
-  IpResolutionPage({super.key});
+
+
+
+class IpResolutionPage extends StatefulWidget {
+  const IpResolutionPage({super.key});
+
+  @override
+  State<IpResolutionPage> createState() => _IpResolutionPageState();
+}
+
+class _IpResolutionPageState extends State<IpResolutionPage> {
   final newIp = TextEditingController();
   final newPort = TextEditingController();
+
+    // get rid of controllers 
+  @override
+  void dispose(){
+    newIp.dispose();
+    newPort.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +67,17 @@ class IpResolutionPage extends StatelessWidget {
                 
                
                 ElevatedButton(
-                  onPressed: (){
-                    context.read<NetworkBloc>().add(NetworkNewIp(newIp.text, newPort.text));
-                    }, 
+                  onPressed: () => context.read<NetworkBloc>().add(NetworkNewIp(newIp: newIp.text, newPort: newPort.text)), 
                   child: Text("submit")
                   ),
               
                 ElevatedButton(
-                  onPressed: (){ Navigator.pop(context);}, 
+                  onPressed: () => Navigator.pop(context), 
                   child: Text("back")
                   ),
 
                 ElevatedButton(
-                onPressed: (){ context.read<NetworkBloc>().add(NetworkConnecionCheck());}, 
+                onPressed: () => context.read<NetworkBloc>().add(NetworkConnecionCheck()), 
                 child: Text("connection")
                 ),
               ],

@@ -37,7 +37,7 @@ func main() {
 	muxApp := http.NewServeMux()
 
 	muxApp.Handle(appApiServicev1connect.NewAppApiServiceHandler(
-		&apphandler.AppHandler{DataQuery: pgDB},
+		&apphandler.AppHandler{DataQuery: pgDB, DbConn: dbConn},
 		interceptors,
 	))
 

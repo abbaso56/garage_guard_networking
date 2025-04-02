@@ -48,14 +48,11 @@ final $typed_data.Uint8List registerUserRequestDescriptor = $convert.base64Decod
 @$core.Deprecated('Use registerUserResponseDescriptor instead')
 const RegisterUserResponse$json = {
   '1': 'RegisterUserResponse',
-  '2': [
-    {'1': 'jwt', '3': 1, '4': 1, '5': 12, '10': 'jwt'},
-  ],
 };
 
 /// Descriptor for `RegisterUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List registerUserResponseDescriptor = $convert.base64Decode(
-    'ChRSZWdpc3RlclVzZXJSZXNwb25zZRIQCgNqd3QYASABKAxSA2p3dA==');
+    'ChRSZWdpc3RlclVzZXJSZXNwb25zZQ==');
 
 @$core.Deprecated('Use signInRequestDescriptor instead')
 const SignInRequest$json = {
@@ -74,14 +71,11 @@ final $typed_data.Uint8List signInRequestDescriptor = $convert.base64Decode(
 @$core.Deprecated('Use signInResponseDescriptor instead')
 const SignInResponse$json = {
   '1': 'SignInResponse',
-  '2': [
-    {'1': 'jwt', '3': 1, '4': 1, '5': 12, '10': 'jwt'},
-  ],
 };
 
 /// Descriptor for `SignInResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List signInResponseDescriptor = $convert.base64Decode(
-    'Cg5TaWduSW5SZXNwb25zZRIQCgNqd3QYASABKAxSA2p3dA==');
+    'Cg5TaWduSW5SZXNwb25zZQ==');
 
 @$core.Deprecated('Use newGarageRequestDescriptor instead')
 const NewGarageRequest$json = {
@@ -118,12 +112,14 @@ const Garage$json = {
   '1': 'Garage',
   '2': [
     {'1': 'garage_name', '3': 1, '4': 1, '5': 9, '10': 'garageName'},
+    {'1': 'id', '3': 2, '4': 1, '5': 12, '10': 'id'},
   ],
 };
 
 /// Descriptor for `Garage`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List garageDescriptor = $convert.base64Decode(
-    'CgZHYXJhZ2USHwoLZ2FyYWdlX25hbWUYASABKAlSCmdhcmFnZU5hbWU=');
+    'CgZHYXJhZ2USHwoLZ2FyYWdlX25hbWUYASABKAlSCmdhcmFnZU5hbWUSDgoCaWQYAiABKAxSAm'
+    'lk');
 
 @$core.Deprecated('Use getGaragesResponseDescriptor instead')
 const GetGaragesResponse$json = {
