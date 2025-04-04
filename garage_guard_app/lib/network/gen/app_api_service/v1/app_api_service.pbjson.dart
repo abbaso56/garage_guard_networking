@@ -112,13 +112,13 @@ const Garage$json = {
   '1': 'Garage',
   '2': [
     {'1': 'garage_name', '3': 1, '4': 1, '5': 9, '10': 'garageName'},
-    {'1': 'id', '3': 2, '4': 1, '5': 12, '10': 'id'},
+    {'1': 'id', '3': 2, '4': 1, '5': 9, '10': 'id'},
   ],
 };
 
 /// Descriptor for `Garage`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List garageDescriptor = $convert.base64Decode(
-    'CgZHYXJhZ2USHwoLZ2FyYWdlX25hbWUYASABKAlSCmdhcmFnZU5hbWUSDgoCaWQYAiABKAxSAm'
+    'CgZHYXJhZ2USHwoLZ2FyYWdlX25hbWUYASABKAlSCmdhcmFnZU5hbWUSDgoCaWQYAiABKAlSAm'
     'lk');
 
 @$core.Deprecated('Use getGaragesResponseDescriptor instead')
@@ -134,6 +134,49 @@ final $typed_data.Uint8List getGaragesResponseDescriptor = $convert.base64Decode
     'ChJHZXRHYXJhZ2VzUmVzcG9uc2USNAoHZ2FyYWdlcxgBIAMoCzIaLmFwcF9hcGlfc2VydmljZS'
     '52MS5HYXJhZ2VSB2dhcmFnZXM=');
 
+@$core.Deprecated('Use getGarageByGarageIdRequestDescriptor instead')
+const GetGarageByGarageIdRequest$json = {
+  '1': 'GetGarageByGarageIdRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetGarageByGarageIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGarageByGarageIdRequestDescriptor = $convert.base64Decode(
+    'ChpHZXRHYXJhZ2VCeUdhcmFnZUlkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use garageInfoDescriptor instead')
+const GarageInfo$json = {
+  '1': 'GarageInfo',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'garage_name', '3': 2, '4': 1, '5': 9, '10': 'garageName'},
+    {'1': 'device_id', '3': 3, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'gesture_seq', '3': 4, '4': 1, '5': 9, '10': 'gestureSeq'},
+    {'1': 'video_url', '3': 5, '4': 1, '5': 9, '10': 'videoUrl'},
+  ],
+};
+
+/// Descriptor for `GarageInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List garageInfoDescriptor = $convert.base64Decode(
+    'CgpHYXJhZ2VJbmZvEg4KAmlkGAEgASgJUgJpZBIfCgtnYXJhZ2VfbmFtZRgCIAEoCVIKZ2FyYW'
+    'dlTmFtZRIbCglkZXZpY2VfaWQYAyABKAlSCGRldmljZUlkEh8KC2dlc3R1cmVfc2VxGAQgASgJ'
+    'UgpnZXN0dXJlU2VxEhsKCXZpZGVvX3VybBgFIAEoCVIIdmlkZW9Vcmw=');
+
+@$core.Deprecated('Use getGarageByGarageIdResponseDescriptor instead')
+const GetGarageByGarageIdResponse$json = {
+  '1': 'GetGarageByGarageIdResponse',
+  '2': [
+    {'1': 'garage', '3': 1, '4': 1, '5': 11, '6': '.app_api_service.v1.GarageInfo', '10': 'garage'},
+  ],
+};
+
+/// Descriptor for `GetGarageByGarageIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGarageByGarageIdResponseDescriptor = $convert.base64Decode(
+    'ChtHZXRHYXJhZ2VCeUdhcmFnZUlkUmVzcG9uc2USNgoGZ2FyYWdlGAEgASgLMh4uYXBwX2FwaV'
+    '9zZXJ2aWNlLnYxLkdhcmFnZUluZm9SBmdhcmFnZQ==');
+
 const $core.Map<$core.String, $core.dynamic> AppApiServiceBase$json = {
   '1': 'AppApiService',
   '2': [
@@ -142,6 +185,7 @@ const $core.Map<$core.String, $core.dynamic> AppApiServiceBase$json = {
     {'1': 'SignIn', '2': '.app_api_service.v1.SignInRequest', '3': '.app_api_service.v1.SignInResponse', '4': {}},
     {'1': 'NewGarage', '2': '.app_api_service.v1.NewGarageRequest', '3': '.app_api_service.v1.NewGarageResponse', '4': {}},
     {'1': 'GetGarages', '2': '.app_api_service.v1.GetGaragesRequest', '3': '.app_api_service.v1.GetGaragesResponse', '4': {}},
+    {'1': 'GetGarageByGarageId', '2': '.app_api_service.v1.GetGarageByGarageIdRequest', '3': '.app_api_service.v1.GetGarageByGarageIdResponse', '4': {}},
   ],
 };
 
@@ -158,6 +202,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> AppApiServ
   '.app_api_service.v1.GetGaragesRequest': GetGaragesRequest$json,
   '.app_api_service.v1.GetGaragesResponse': GetGaragesResponse$json,
   '.app_api_service.v1.Garage': Garage$json,
+  '.app_api_service.v1.GetGarageByGarageIdRequest': GetGarageByGarageIdRequest$json,
+  '.app_api_service.v1.GetGarageByGarageIdResponse': GetGarageByGarageIdResponse$json,
+  '.app_api_service.v1.GarageInfo': GarageInfo$json,
 };
 
 /// Descriptor for `AppApiService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -170,5 +217,8 @@ final $typed_data.Uint8List appApiServiceDescriptor = $convert.base64Decode(
     '9hcGlfc2VydmljZS52MS5TaWduSW5SZXNwb25zZSIAEloKCU5ld0dhcmFnZRIkLmFwcF9hcGlf'
     'c2VydmljZS52MS5OZXdHYXJhZ2VSZXF1ZXN0GiUuYXBwX2FwaV9zZXJ2aWNlLnYxLk5ld0dhcm'
     'FnZVJlc3BvbnNlIgASXQoKR2V0R2FyYWdlcxIlLmFwcF9hcGlfc2VydmljZS52MS5HZXRHYXJh'
-    'Z2VzUmVxdWVzdBomLmFwcF9hcGlfc2VydmljZS52MS5HZXRHYXJhZ2VzUmVzcG9uc2UiAA==');
+    'Z2VzUmVxdWVzdBomLmFwcF9hcGlfc2VydmljZS52MS5HZXRHYXJhZ2VzUmVzcG9uc2UiABJ4Ch'
+    'NHZXRHYXJhZ2VCeUdhcmFnZUlkEi4uYXBwX2FwaV9zZXJ2aWNlLnYxLkdldEdhcmFnZUJ5R2Fy'
+    'YWdlSWRSZXF1ZXN0Gi8uYXBwX2FwaV9zZXJ2aWNlLnYxLkdldEdhcmFnZUJ5R2FyYWdlSWRSZX'
+    'Nwb25zZSIA');
 

@@ -23,76 +23,112 @@ class _HomePageState extends State<HomePage> {
   List<Garage>garages = [];
 
   // timer for sync the list of garages
-  Timer? garagesSync;
+  Timer? garageListSync;
 
 
   //get rid of timer
   @override
   void dispose() {
     
-    garagesSync?.cancel();
+    garageListSync?.cancel();
 
 
     super.dispose();
   }
 
+ 
 
 
   @override
   Widget build(BuildContext context) {
   
+  garages.add(Garage(
+    garageName: "Home",
+    id:"",
+  ));
+  garages.add(Garage(
+    garageName: "Parent's garage",
+    id:"",
+  ));
 
-
-  // Intial getGaragesRequest on page load
-  context.read<NetworkBloc>().add(NetworkGetGarages());
+  // // Intial getGaragesRequest on page load
+  // context.read<NetworkBloc>().add(NetworkGetGarages());
 
 
   //Every minute make a getGarages request to the server
-  final period = Duration(minutes: 1);
+  // final period = Duration(minutes: 1);
   
-  garagesSync = Timer.periodic(period, (timer){
-    context.read<NetworkBloc>().add(NetworkGetGarages());
-  });
+  // garageListSync = Timer.periodic(period, (timer){
+  //   context.read<NetworkBloc>().add(NetworkGetGarages());
+  // });
 
 
     return StyledScaffold(
-      bgColor: const Color.fromARGB(255, 137, 147, 192), 
-      child: BlocBuilder<NetworkBloc, NetworkState>(
+      bgColor: const Color(0xFFF7F2F9), 
+      child: BlocConsumer<NetworkBloc, NetworkState>(
 
         // checks if the state is a response to a getGarages request and if so grabs the updated list of garages
-        buildWhen: (previous, current) {
+        buildWhen: (previous, current) =>(current is NetworkGetGaragesResponseState),
+        
+        listener: (context, current){
           if (current is NetworkGetGaragesResponseState){
             garages = current.garages;
-            return true;
           }
-          return false;
         },
         builder: (context, state) {
-          return Column(
+          return Stack(
+            alignment: AlignmentDirectional(40, 10),
             children: [
               // List of Garages
-              ListView.builder(
-                  itemCount: garages.length,
-                  prototypeItem: ListTile(title: Text(garages.first.garageName)),
-                  itemBuilder: (context, i){
-                    return ListTile(title: Text(garages[i].garageName));
-                  }
+             
+              ListTileTheme(
+                tileColor: Color.fromARGB(255, 219, 232, 241),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                
+
+                child:
+                ListView.builder(
+                    itemCount: garages.length,
+                    prototypeItem: garages.isNotEmpty ? FullListTile(text:garages.first.garageName): Center( child:Text('No garages')),
+                    itemBuilder: (context, i){
+                      return FullListTile(text: garages[i].garageName);
+                    }
+                ),
               ),
+              // // Button to add garages
+              // IconButton(
+              // onPressed: (){  garages.first.garageName
+              //   Navigator.pushNamed(context, "/add_garage");
+              //   },
+              // icon: Icon(Icons.add),
+
+              // )
+
               
-              // Button to add garages
-              IconButton(
-              onPressed: (){
-                Navigator.pushNamed(context, "/add_garage");
-                },
-              icon: Icon(Icons.add),
+           
+                  Row(
+                    children: [
 
-              )
 
+                    ],
+                  ),
+              
 
             ],
           );
         },
       ),
     );
+  }
+}
+
+
+class FullListTile extends StatelessWidget {
+  final String text;
+  const FullListTile({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(title: Text(text));
   }
 }

@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/rootCA.crt
     - assets/srv.crt
+    - assets/garage_guard_logo.png
 
 
 

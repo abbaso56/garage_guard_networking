@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:connectrpc/connect.dart';
@@ -157,12 +158,22 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
       emit(NetworkLoggedInState());
 
-
-
     });
 
 
+    // Get the info need about a garage
+    // For now doesn't get created at or updated at
 
+    on<NetworkGetGarageByGarageId>((event, emit) async{
+      final req = appClient.getGarageByGarageId(GetGarageByGarageIdRequest(id: event.id));
+      emit(NetworkGetGarageByGarageIdRequestState());
+
+      final resp = await req;
+      emit(NetworkGetGarageByGarageIdResponseState( garageInfo: resp.garage));
+      emit(NetworkLoggedInState());
+      
+
+    });
 
 
 

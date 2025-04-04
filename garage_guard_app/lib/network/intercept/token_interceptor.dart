@@ -25,30 +25,34 @@ class TokenIntercepter{
   AnyFn<I, O> tokenHandler<I extends Object, O extends Object>(AnyFn<I, O> next){
     return (req) async{
       final skip = noAuthList.contains(req.spec.procedure);
-      log("$skip");
+      
 
 
-      if (skip){
-        final resp = await next(req);
-        return resp;
+      if (!skip){
+        log('----------------------------------------------');
+        log(token);
+        log('---------------------------------------------');
+        req.headers.add("jwt", token);
+       
       }
       // if (token == ""){
         //abort
       // }
-      req.headers.add("jwt", token);
+      
 
       //----------------------------------------------------------------
         final resp = await next(req);
       //----------------------------------------------------------------
 
-      
+      log('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
       if (returnsAuth.contains(resp.spec.procedure)){
-        token = resp.headers.get("jwt")!.first;
+        log("${resp.headers.get("jwt")!}");
+        token = resp.headers.get("jwt")!.toString();
         log(token);
       }
 
 
-
+      log('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
 
 
 

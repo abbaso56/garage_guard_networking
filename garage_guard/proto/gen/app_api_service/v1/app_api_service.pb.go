@@ -394,7 +394,7 @@ func (*GetGaragesRequest) Descriptor() ([]byte, []int) {
 type Garage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GarageName    string                 `protobuf:"bytes,1,opt,name=garage_name,json=garageName,proto3" json:"garage_name,omitempty"`
-	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -436,11 +436,11 @@ func (x *Garage) GetGarageName() string {
 	return ""
 }
 
-func (x *Garage) GetId() []byte {
+func (x *Garage) GetId() string {
 	if x != nil {
 		return x.Id
 	}
-	return nil
+	return ""
 }
 
 type GetGaragesResponse struct {
@@ -487,6 +487,170 @@ func (x *GetGaragesResponse) GetGarages() []*Garage {
 	return nil
 }
 
+type GetGarageByGarageIdRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetGarageByGarageIdRequest) Reset() {
+	*x = GetGarageByGarageIdRequest{}
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetGarageByGarageIdRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetGarageByGarageIdRequest) ProtoMessage() {}
+
+func (x *GetGarageByGarageIdRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetGarageByGarageIdRequest.ProtoReflect.Descriptor instead.
+func (*GetGarageByGarageIdRequest) Descriptor() ([]byte, []int) {
+	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetGarageByGarageIdRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GarageInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	GarageName    string                 `protobuf:"bytes,2,opt,name=garage_name,json=garageName,proto3" json:"garage_name,omitempty"`
+	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	GestureSeq    string                 `protobuf:"bytes,4,opt,name=gesture_seq,json=gestureSeq,proto3" json:"gesture_seq,omitempty"`
+	VideoUrl      string                 `protobuf:"bytes,5,opt,name=video_url,json=videoUrl,proto3" json:"video_url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GarageInfo) Reset() {
+	*x = GarageInfo{}
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GarageInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GarageInfo) ProtoMessage() {}
+
+func (x *GarageInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GarageInfo.ProtoReflect.Descriptor instead.
+func (*GarageInfo) Descriptor() ([]byte, []int) {
+	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GarageInfo) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GarageInfo) GetGarageName() string {
+	if x != nil {
+		return x.GarageName
+	}
+	return ""
+}
+
+func (x *GarageInfo) GetDeviceId() string {
+	if x != nil {
+		return x.DeviceId
+	}
+	return ""
+}
+
+func (x *GarageInfo) GetGestureSeq() string {
+	if x != nil {
+		return x.GestureSeq
+	}
+	return ""
+}
+
+func (x *GarageInfo) GetVideoUrl() string {
+	if x != nil {
+		return x.VideoUrl
+	}
+	return ""
+}
+
+type GetGarageByGarageIdResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Garage        *GarageInfo            `protobuf:"bytes,1,opt,name=garage,proto3" json:"garage,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetGarageByGarageIdResponse) Reset() {
+	*x = GetGarageByGarageIdResponse{}
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetGarageByGarageIdResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetGarageByGarageIdResponse) ProtoMessage() {}
+
+func (x *GetGarageByGarageIdResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_app_api_service_v1_app_api_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetGarageByGarageIdResponse.ProtoReflect.Descriptor instead.
+func (*GetGarageByGarageIdResponse) Descriptor() ([]byte, []int) {
+	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetGarageByGarageIdResponse) GetGarage() *GarageInfo {
+	if x != nil {
+		return x.Garage
+	}
+	return nil
+}
+
 var File_app_api_service_v1_app_api_service_proto protoreflect.FileDescriptor
 
 const file_app_api_service_v1_app_api_service_proto_rawDesc = "" +
@@ -510,16 +674,30 @@ const file_app_api_service_v1_app_api_service_proto_rawDesc = "" +
 	"\x06Garage\x12\x1f\n" +
 	"\vgarage_name\x18\x01 \x01(\tR\n" +
 	"garageName\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\fR\x02id\"J\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\"J\n" +
 	"\x12GetGaragesResponse\x124\n" +
-	"\agarages\x18\x01 \x03(\v2\x1a.app_api_service.v1.GarageR\agarages2\xf0\x03\n" +
+	"\agarages\x18\x01 \x03(\v2\x1a.app_api_service.v1.GarageR\agarages\",\n" +
+	"\x1aGetGarageByGarageIdRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x98\x01\n" +
+	"\n" +
+	"GarageInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
+	"\vgarage_name\x18\x02 \x01(\tR\n" +
+	"garageName\x12\x1b\n" +
+	"\tdevice_id\x18\x03 \x01(\tR\bdeviceId\x12\x1f\n" +
+	"\vgesture_seq\x18\x04 \x01(\tR\n" +
+	"gestureSeq\x12\x1b\n" +
+	"\tvideo_url\x18\x05 \x01(\tR\bvideoUrl\"U\n" +
+	"\x1bGetGarageByGarageIdResponse\x126\n" +
+	"\x06garage\x18\x01 \x01(\v2\x1e.app_api_service.v1.GarageInfoR\x06garage2\xea\x04\n" +
 	"\rAppApiService\x12l\n" +
 	"\x0fConnectionCheck\x12*.app_api_service.v1.ConnectionCheckRequest\x1a+.app_api_service.v1.ConnectionCheckResponse\"\x00\x12c\n" +
 	"\fRegisterUser\x12'.app_api_service.v1.RegisterUserRequest\x1a(.app_api_service.v1.RegisterUserResponse\"\x00\x12Q\n" +
 	"\x06SignIn\x12!.app_api_service.v1.SignInRequest\x1a\".app_api_service.v1.SignInResponse\"\x00\x12Z\n" +
 	"\tNewGarage\x12$.app_api_service.v1.NewGarageRequest\x1a%.app_api_service.v1.NewGarageResponse\"\x00\x12]\n" +
 	"\n" +
-	"GetGarages\x12%.app_api_service.v1.GetGaragesRequest\x1a&.app_api_service.v1.GetGaragesResponse\"\x00B;Z9garage_guard/proto/gen/app_api_service/v1;appApiServicev1b\x06proto3"
+	"GetGarages\x12%.app_api_service.v1.GetGaragesRequest\x1a&.app_api_service.v1.GetGaragesResponse\"\x00\x12x\n" +
+	"\x13GetGarageByGarageId\x12..app_api_service.v1.GetGarageByGarageIdRequest\x1a/.app_api_service.v1.GetGarageByGarageIdResponse\"\x00B;Z9garage_guard/proto/gen/app_api_service/v1;appApiServicev1b\x06proto3"
 
 var (
 	file_app_api_service_v1_app_api_service_proto_rawDescOnce sync.Once
@@ -533,37 +711,43 @@ func file_app_api_service_v1_app_api_service_proto_rawDescGZIP() []byte {
 	return file_app_api_service_v1_app_api_service_proto_rawDescData
 }
 
-var file_app_api_service_v1_app_api_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_app_api_service_v1_app_api_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_app_api_service_v1_app_api_service_proto_goTypes = []any{
-	(*ConnectionCheckRequest)(nil),  // 0: app_api_service.v1.ConnectionCheckRequest
-	(*ConnectionCheckResponse)(nil), // 1: app_api_service.v1.ConnectionCheckResponse
-	(*RegisterUserRequest)(nil),     // 2: app_api_service.v1.RegisterUserRequest
-	(*RegisterUserResponse)(nil),    // 3: app_api_service.v1.RegisterUserResponse
-	(*SignInRequest)(nil),           // 4: app_api_service.v1.SignInRequest
-	(*SignInResponse)(nil),          // 5: app_api_service.v1.SignInResponse
-	(*NewGarageRequest)(nil),        // 6: app_api_service.v1.NewGarageRequest
-	(*NewGarageResponse)(nil),       // 7: app_api_service.v1.NewGarageResponse
-	(*GetGaragesRequest)(nil),       // 8: app_api_service.v1.GetGaragesRequest
-	(*Garage)(nil),                  // 9: app_api_service.v1.Garage
-	(*GetGaragesResponse)(nil),      // 10: app_api_service.v1.GetGaragesResponse
+	(*ConnectionCheckRequest)(nil),      // 0: app_api_service.v1.ConnectionCheckRequest
+	(*ConnectionCheckResponse)(nil),     // 1: app_api_service.v1.ConnectionCheckResponse
+	(*RegisterUserRequest)(nil),         // 2: app_api_service.v1.RegisterUserRequest
+	(*RegisterUserResponse)(nil),        // 3: app_api_service.v1.RegisterUserResponse
+	(*SignInRequest)(nil),               // 4: app_api_service.v1.SignInRequest
+	(*SignInResponse)(nil),              // 5: app_api_service.v1.SignInResponse
+	(*NewGarageRequest)(nil),            // 6: app_api_service.v1.NewGarageRequest
+	(*NewGarageResponse)(nil),           // 7: app_api_service.v1.NewGarageResponse
+	(*GetGaragesRequest)(nil),           // 8: app_api_service.v1.GetGaragesRequest
+	(*Garage)(nil),                      // 9: app_api_service.v1.Garage
+	(*GetGaragesResponse)(nil),          // 10: app_api_service.v1.GetGaragesResponse
+	(*GetGarageByGarageIdRequest)(nil),  // 11: app_api_service.v1.GetGarageByGarageIdRequest
+	(*GarageInfo)(nil),                  // 12: app_api_service.v1.GarageInfo
+	(*GetGarageByGarageIdResponse)(nil), // 13: app_api_service.v1.GetGarageByGarageIdResponse
 }
 var file_app_api_service_v1_app_api_service_proto_depIdxs = []int32{
 	9,  // 0: app_api_service.v1.GetGaragesResponse.garages:type_name -> app_api_service.v1.Garage
-	0,  // 1: app_api_service.v1.AppApiService.ConnectionCheck:input_type -> app_api_service.v1.ConnectionCheckRequest
-	2,  // 2: app_api_service.v1.AppApiService.RegisterUser:input_type -> app_api_service.v1.RegisterUserRequest
-	4,  // 3: app_api_service.v1.AppApiService.SignIn:input_type -> app_api_service.v1.SignInRequest
-	6,  // 4: app_api_service.v1.AppApiService.NewGarage:input_type -> app_api_service.v1.NewGarageRequest
-	8,  // 5: app_api_service.v1.AppApiService.GetGarages:input_type -> app_api_service.v1.GetGaragesRequest
-	1,  // 6: app_api_service.v1.AppApiService.ConnectionCheck:output_type -> app_api_service.v1.ConnectionCheckResponse
-	3,  // 7: app_api_service.v1.AppApiService.RegisterUser:output_type -> app_api_service.v1.RegisterUserResponse
-	5,  // 8: app_api_service.v1.AppApiService.SignIn:output_type -> app_api_service.v1.SignInResponse
-	7,  // 9: app_api_service.v1.AppApiService.NewGarage:output_type -> app_api_service.v1.NewGarageResponse
-	10, // 10: app_api_service.v1.AppApiService.GetGarages:output_type -> app_api_service.v1.GetGaragesResponse
-	6,  // [6:11] is the sub-list for method output_type
-	1,  // [1:6] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+	12, // 1: app_api_service.v1.GetGarageByGarageIdResponse.garage:type_name -> app_api_service.v1.GarageInfo
+	0,  // 2: app_api_service.v1.AppApiService.ConnectionCheck:input_type -> app_api_service.v1.ConnectionCheckRequest
+	2,  // 3: app_api_service.v1.AppApiService.RegisterUser:input_type -> app_api_service.v1.RegisterUserRequest
+	4,  // 4: app_api_service.v1.AppApiService.SignIn:input_type -> app_api_service.v1.SignInRequest
+	6,  // 5: app_api_service.v1.AppApiService.NewGarage:input_type -> app_api_service.v1.NewGarageRequest
+	8,  // 6: app_api_service.v1.AppApiService.GetGarages:input_type -> app_api_service.v1.GetGaragesRequest
+	11, // 7: app_api_service.v1.AppApiService.GetGarageByGarageId:input_type -> app_api_service.v1.GetGarageByGarageIdRequest
+	1,  // 8: app_api_service.v1.AppApiService.ConnectionCheck:output_type -> app_api_service.v1.ConnectionCheckResponse
+	3,  // 9: app_api_service.v1.AppApiService.RegisterUser:output_type -> app_api_service.v1.RegisterUserResponse
+	5,  // 10: app_api_service.v1.AppApiService.SignIn:output_type -> app_api_service.v1.SignInResponse
+	7,  // 11: app_api_service.v1.AppApiService.NewGarage:output_type -> app_api_service.v1.NewGarageResponse
+	10, // 12: app_api_service.v1.AppApiService.GetGarages:output_type -> app_api_service.v1.GetGaragesResponse
+	13, // 13: app_api_service.v1.AppApiService.GetGarageByGarageId:output_type -> app_api_service.v1.GetGarageByGarageIdResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_app_api_service_v1_app_api_service_proto_init() }
@@ -577,7 +761,7 @@ func file_app_api_service_v1_app_api_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_app_api_service_v1_app_api_service_proto_rawDesc), len(file_app_api_service_v1_app_api_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

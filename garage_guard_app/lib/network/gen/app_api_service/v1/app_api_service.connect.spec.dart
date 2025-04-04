@@ -50,4 +50,12 @@ abstract final class AppApiService {
     app_api_servicev1app_api_service.GetGaragesRequest.new,
     app_api_servicev1app_api_service.GetGaragesResponse.new,
   );
+
+  /// Gets a garage through its own id
+  static const getGarageByGarageId = connect.Spec(
+    '/$name/GetGarageByGarageId',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.GetGarageByGarageIdRequest.new,
+    app_api_servicev1app_api_service.GetGarageByGarageIdResponse.new,
+  );
 }

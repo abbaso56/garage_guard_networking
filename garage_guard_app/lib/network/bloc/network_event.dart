@@ -36,3 +36,7 @@ class NetworkNewGarage extends NetworkEvent{
   NetworkNewGarage({required this.garageName});
 }
 
+class NetworkGetGarageByGarageId extends NetworkEvent{
+  final String id;
+  NetworkGetGarageByGarageId({required this.id});
+}

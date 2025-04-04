@@ -10,7 +10,7 @@ COPY ./root_ca/rootCA.crt /usr/local/share/ca-certificates/
 
 COPY ./server_tls  usr/server_tls
 
-COPY ./jwt_key/ /usr/keys/jwt_key/
+COPY ./jwt_key /usr/keys/jwt_key
 
 RUN update-ca-certificates
 

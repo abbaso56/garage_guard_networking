@@ -46,6 +46,9 @@ const (
 	// AppApiServiceGetGaragesProcedure is the fully-qualified name of the AppApiService's GetGarages
 	// RPC.
 	AppApiServiceGetGaragesProcedure = "/app_api_service.v1.AppApiService/GetGarages"
+	// AppApiServiceGetGarageByGarageIdProcedure is the fully-qualified name of the AppApiService's
+	// GetGarageByGarageId RPC.
+	AppApiServiceGetGarageByGarageIdProcedure = "/app_api_service.v1.AppApiService/GetGarageByGarageId"
 )
 
 // AppApiServiceClient is a client for the app_api_service.v1.AppApiService service.
@@ -61,6 +64,8 @@ type AppApiServiceClient interface {
 	NewGarage(context.Context, *connect.Request[v1.NewGarageRequest]) (*connect.Response[v1.NewGarageResponse], error)
 	// Gets the Garages that are registered to the user
 	GetGarages(context.Context, *connect.Request[v1.GetGaragesRequest]) (*connect.Response[v1.GetGaragesResponse], error)
+	// Gets a garage through its own id
+	GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error)
 }
 
 // NewAppApiServiceClient constructs a client for the app_api_service.v1.AppApiService service. By
@@ -104,16 +109,23 @@ func NewAppApiServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(appApiServiceMethods.ByName("GetGarages")),
 			connect.WithClientOptions(opts...),
 		),
+		getGarageByGarageId: connect.NewClient[v1.GetGarageByGarageIdRequest, v1.GetGarageByGarageIdResponse](
+			httpClient,
+			baseURL+AppApiServiceGetGarageByGarageIdProcedure,
+			connect.WithSchema(appApiServiceMethods.ByName("GetGarageByGarageId")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // appApiServiceClient implements AppApiServiceClient.
 type appApiServiceClient struct {
-	connectionCheck *connect.Client[v1.ConnectionCheckRequest, v1.ConnectionCheckResponse]
-	registerUser    *connect.Client[v1.RegisterUserRequest, v1.RegisterUserResponse]
-	signIn          *connect.Client[v1.SignInRequest, v1.SignInResponse]
-	newGarage       *connect.Client[v1.NewGarageRequest, v1.NewGarageResponse]
-	getGarages      *connect.Client[v1.GetGaragesRequest, v1.GetGaragesResponse]
+	connectionCheck     *connect.Client[v1.ConnectionCheckRequest, v1.ConnectionCheckResponse]
+	registerUser        *connect.Client[v1.RegisterUserRequest, v1.RegisterUserResponse]
+	signIn              *connect.Client[v1.SignInRequest, v1.SignInResponse]
+	newGarage           *connect.Client[v1.NewGarageRequest, v1.NewGarageResponse]
+	getGarages          *connect.Client[v1.GetGaragesRequest, v1.GetGaragesResponse]
+	getGarageByGarageId *connect.Client[v1.GetGarageByGarageIdRequest, v1.GetGarageByGarageIdResponse]
 }
 
 // ConnectionCheck calls app_api_service.v1.AppApiService.ConnectionCheck.
@@ -141,6 +153,11 @@ func (c *appApiServiceClient) GetGarages(ctx context.Context, req *connect.Reque
 	return c.getGarages.CallUnary(ctx, req)
 }
 
+// GetGarageByGarageId calls app_api_service.v1.AppApiService.GetGarageByGarageId.
+func (c *appApiServiceClient) GetGarageByGarageId(ctx context.Context, req *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error) {
+	return c.getGarageByGarageId.CallUnary(ctx, req)
+}
+
 // AppApiServiceHandler is an implementation of the app_api_service.v1.AppApiService service.
 type AppApiServiceHandler interface {
 	// check connection
@@ -154,6 +171,8 @@ type AppApiServiceHandler interface {
 	NewGarage(context.Context, *connect.Request[v1.NewGarageRequest]) (*connect.Response[v1.NewGarageResponse], error)
 	// Gets the Garages that are registered to the user
 	GetGarages(context.Context, *connect.Request[v1.GetGaragesRequest]) (*connect.Response[v1.GetGaragesResponse], error)
+	// Gets a garage through its own id
+	GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error)
 }
 
 // NewAppApiServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -193,6 +212,12 @@ func NewAppApiServiceHandler(svc AppApiServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(appApiServiceMethods.ByName("GetGarages")),
 		connect.WithHandlerOptions(opts...),
 	)
+	appApiServiceGetGarageByGarageIdHandler := connect.NewUnaryHandler(
+		AppApiServiceGetGarageByGarageIdProcedure,
+		svc.GetGarageByGarageId,
+		connect.WithSchema(appApiServiceMethods.ByName("GetGarageByGarageId")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/app_api_service.v1.AppApiService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case AppApiServiceConnectionCheckProcedure:
@@ -205,6 +230,8 @@ func NewAppApiServiceHandler(svc AppApiServiceHandler, opts ...connect.HandlerOp
 			appApiServiceNewGarageHandler.ServeHTTP(w, r)
 		case AppApiServiceGetGaragesProcedure:
 			appApiServiceGetGaragesHandler.ServeHTTP(w, r)
+		case AppApiServiceGetGarageByGarageIdProcedure:
+			appApiServiceGetGarageByGarageIdHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -232,4 +259,8 @@ func (UnimplementedAppApiServiceHandler) NewGarage(context.Context, *connect.Req
 
 func (UnimplementedAppApiServiceHandler) GetGarages(context.Context, *connect.Request[v1.GetGaragesRequest]) (*connect.Response[v1.GetGaragesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AppApiService.GetGarages is not implemented"))
+}
+
+func (UnimplementedAppApiServiceHandler) GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AppApiService.GetGarageByGarageId is not implemented"))
 }

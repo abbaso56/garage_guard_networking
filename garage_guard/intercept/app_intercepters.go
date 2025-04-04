@@ -2,10 +2,7 @@ package intercept
 
 import (
 	"context"
-	"errors"
-	"garage_guard/helpers"
 	"garage_guard/proto/gen/app_api_service/v1/appApiServicev1connect"
-	"time"
 
 	"connectrpc.com/connect"
 )
@@ -21,24 +18,24 @@ func AppAuthIntercepter() connect.UnaryInterceptorFunc {
 			if skipRpc[req.Spec().Procedure] {
 				return next(ctx, req)
 			}
+			return next(ctx, req)
+			// jwt := req.Header().Get("jwt")
 
-			jwt := req.Header().Get("jwt")
+			// if jwt == "" {
+			// 	return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("missing authentication"))
+			// }
+			// //checks if the jwt is valid
+			// body, err := helpers.CheckJwt([]byte(jwt))
+			// if err != nil {
+			// 	return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("incorrect authentication"))
+			// }
 
-			if jwt == "" {
-				return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("missing authentication"))
-			}
-			//checks if the jwt is valid
-			body, err := helpers.CheckJwt([]byte(jwt))
-			if err != nil {
-				return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("incorrect authentication"))
-			}
-
-			if time.Now().Compare(body.ExpiresAt) >= 0 {
-				return nil, connect.NewError(connect.CodePermissionDenied, errors.New("expired authentication"))
-			}
+			// if time.Now().Compare(body.ExpiresAt) >= 0 {
+			// 	return nil, connect.NewError(connect.CodePermissionDenied, errors.New("expired authentication"))
+			// }
 			ctx = context.WithValue(ctx, "jwtBody", body)
 
-			return next(ctx, req)
+			// return next(ctx, req)
 		})
 
 	}

@@ -53,4 +53,13 @@ final class NetworkNewGarageRequestState extends NetworkState{}
 final class NetworkNewGarageResponseState extends NetworkState{}
 
 
+// getGarageByGarageId states
+final class NetworkGetGarageByGarageIdRequestState extends NetworkState{}
+
+final class NetworkGetGarageByGarageIdResponseState extends NetworkState{
+  final GarageInfo garageInfo;
+  const NetworkGetGarageByGarageIdResponseState({required this.garageInfo});
+}
+
+
 

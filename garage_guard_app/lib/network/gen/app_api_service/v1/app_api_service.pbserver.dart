@@ -26,6 +26,7 @@ abstract class AppApiServiceBase extends $pb.GeneratedService {
   $async.Future<$0.SignInResponse> signIn($pb.ServerContext ctx, $0.SignInRequest request);
   $async.Future<$0.NewGarageResponse> newGarage($pb.ServerContext ctx, $0.NewGarageRequest request);
   $async.Future<$0.GetGaragesResponse> getGarages($pb.ServerContext ctx, $0.GetGaragesRequest request);
+  $async.Future<$0.GetGarageByGarageIdResponse> getGarageByGarageId($pb.ServerContext ctx, $0.GetGarageByGarageIdRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -34,6 +35,7 @@ abstract class AppApiServiceBase extends $pb.GeneratedService {
       case 'SignIn': return $0.SignInRequest();
       case 'NewGarage': return $0.NewGarageRequest();
       case 'GetGarages': return $0.GetGaragesRequest();
+      case 'GetGarageByGarageId': return $0.GetGarageByGarageIdRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -45,6 +47,7 @@ abstract class AppApiServiceBase extends $pb.GeneratedService {
       case 'SignIn': return this.signIn(ctx, request as $0.SignInRequest);
       case 'NewGarage': return this.newGarage(ctx, request as $0.NewGarageRequest);
       case 'GetGarages': return this.getGarages(ctx, request as $0.GetGaragesRequest);
+      case 'GetGarageByGarageId': return this.getGarageByGarageId(ctx, request as $0.GetGarageByGarageIdRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

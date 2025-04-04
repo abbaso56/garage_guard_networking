@@ -83,7 +83,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   
                   BlocListener<NetworkBloc, NetworkState>(
                     listener: (context, state) {
-                      if (state is NetworkLoggedInState) {Navigator.pushNamed(context,"/home_screen");};
+                      if (state is NetworkLoggedInState) {Navigator.pushNamed(context,"/home_page");};
                     },
                     child:
                       ElevatedButton(
@@ -95,7 +95,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
 
                     // Switch to Sign in page
-                    ElevatedButton(
+                    TextButton(
                         onPressed: () => Navigator.pushNamed(context, "/sign_in"), 
                         child: Text("Already have an acount?"),
                       ),

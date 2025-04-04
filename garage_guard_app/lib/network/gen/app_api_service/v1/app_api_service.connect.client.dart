@@ -98,4 +98,22 @@ extension type AppApiServiceClient (connect.Transport _transport) {
       onTrailer: onTrailer,
     );
   }
+
+  /// Gets a garage through its own id
+  Future<app_api_servicev1app_api_service.GetGarageByGarageIdResponse> getGarageByGarageId(
+    app_api_servicev1app_api_service.GetGarageByGarageIdRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AppApiService.getGarageByGarageId,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
 }

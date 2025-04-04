@@ -22,3 +22,4 @@ class StyledScaffold extends StatelessWidget {
     );
   }
 }
+

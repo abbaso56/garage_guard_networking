@@ -22,10 +22,14 @@ class _DecoratedTextFieldState extends State<DecoratedTextField> {
           controller: widget.controller,
           obscureText: widget.hide,
           decoration: InputDecoration(
+            focusColor: Color(0xFF032383),
             border: OutlineInputBorder(),
-            fillColor: const Color.fromARGB(255, 195, 204, 211),
+            fillColor: Color(0xFFF7F2F9),
             filled: true,
             hintText: widget.fieldName,
+            hintStyle: TextStyle(
+              color: Color(0xFF032383),
+            )
           ),
         ),
       )

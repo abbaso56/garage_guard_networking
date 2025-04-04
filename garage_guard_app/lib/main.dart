@@ -29,14 +29,14 @@ class MyApp extends StatelessWidget {
       create: (context) => NetworkBloc( clientinfo:  clientinfo),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "/register_user",
+        initialRoute: "/sign_in",
         routes: {
           "/register_user": (context) => RegisterUserPage(),
           "/sign_in": (context) => SignInPage(),
           "/ip_resolution": (context) => IpResolutionPage(),
 
           // Signed in routes
-          "/home_screen": (context) => HomePage(),
+          "/home_page": (context) => HomePage(),
           "/add_garage": (context) => AddGaragePage(),
           "/add_device": (context) =>  AddDevicePage(),
         },

@@ -32,19 +32,26 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Color(0xFFD6E1EF),
       body: SafeArea(child: 
-        Column(
+        Center(
+          child:Column(
           children: [
-            // email
-            const SizedBox(height: 50),
+            const Gap(50),
+            Image.asset(
+              "assets/garage_guard_logo.png",
+              width: 200,
+              height: 200,
+              ),
+            // username
+            const Gap(20),
             DecoratedTextField(
               controller: username,
               fieldName: "Username",
               hide: false,
             ),
             // password
-            const Gap(50),
+            const Gap(20),
             DecoratedTextField(
               controller: password,
               fieldName: "Password",
@@ -52,27 +59,40 @@ class _SignInPageState extends State<SignInPage> {
             ),
 
             // sign in Button
-
+            Gap(20),
             BlocListener<NetworkBloc, NetworkState>(
                 listener: (context, state) {
-                  if (state is NetworkLoggedInState) {Navigator.pushNamed(context,"/home_screen");};
+                  if (state is NetworkLoggedInState) {Navigator.pushNamed(context,"/home_page");};
                 },
                 child:
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(Color(0xFF032383)),
+                      foregroundColor: WidgetStateProperty.all<Color>(Color(0xFFF7F2F9)),
+                    ) ,
                     onPressed: ()=> context.read<NetworkBloc>().add(NetworkSignIn(username: username.text, password: password.text )),
-                    child: Text("Sign In"),
+                    child: Text(
+                      selectionColor: Color(0xFFF7F2F9),
+                      "Sign In"),
                   ),
             ),
 
-          
+           Gap(30),
           // Go to registration page
-            ElevatedButton(
+            TextButton(
+               style: ButtonStyle(
+                      foregroundColor: WidgetStateProperty.all<Color>(Color(0xFF032383)),
+               ),
               onPressed: ()=> Navigator.pushNamed(context, "/register_user"),
-              child: Text("Register?"),
+              child: Text(
+                selectionColor: Color(0xFF032383),
+                "Don't have an account? Register here!"),
               )
           ]
         ),
-      )    
+      ),  
+      
+      )  
     );
   }
 }
