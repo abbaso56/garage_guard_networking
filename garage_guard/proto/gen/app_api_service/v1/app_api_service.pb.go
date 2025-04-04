@@ -99,6 +99,7 @@ type RegisterUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Csr           string                 `protobuf:"bytes,3,opt,name=csr,proto3" json:"csr,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -147,9 +148,19 @@ func (x *RegisterUserRequest) GetPassword() string {
 	return ""
 }
 
+func (x *RegisterUserRequest) GetCsr() string {
+	if x != nil {
+		return x.Csr
+	}
+	return ""
+}
+
 // Response from server with a jwt token for the authenticated session
 type RegisterUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Certificate   string                 `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -184,11 +195,33 @@ func (*RegisterUserResponse) Descriptor() ([]byte, []int) {
 	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{3}
 }
 
+func (x *RegisterUserResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *RegisterUserResponse) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *RegisterUserResponse) GetCertificate() string {
+	if x != nil {
+		return x.Certificate
+	}
+	return ""
+}
+
 // User sends credintials for authentication
 type SignInRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Csr           string                 `protobuf:"bytes,3,opt,name=csr,proto3" json:"csr,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -237,9 +270,19 @@ func (x *SignInRequest) GetPassword() string {
 	return ""
 }
 
+func (x *SignInRequest) GetCsr() string {
+	if x != nil {
+		return x.Csr
+	}
+	return ""
+}
+
 // Server validates user and then sends a token for the authenticated session
 type SignInResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Certificate   string                 `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,10 +317,32 @@ func (*SignInResponse) Descriptor() ([]byte, []int) {
 	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *SignInResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SignInResponse) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *SignInResponse) GetCertificate() string {
+	if x != nil {
+		return x.Certificate
+	}
+	return ""
+}
+
 // Creates a new garage resource with the user that created the garage being the admin
 type NewGarageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GarageName    string                 `protobuf:"bytes,1,opt,name=garage_name,json=garageName,proto3" json:"garage_name,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,6 +380,13 @@ func (*NewGarageRequest) Descriptor() ([]byte, []int) {
 func (x *NewGarageRequest) GetGarageName() string {
 	if x != nil {
 		return x.GarageName
+	}
+	return ""
+}
+
+func (x *NewGarageRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
@@ -357,6 +429,7 @@ func (*NewGarageResponse) Descriptor() ([]byte, []int) {
 
 type GetGaragesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -389,6 +462,13 @@ func (x *GetGaragesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetGaragesRequest.ProtoReflect.Descriptor instead.
 func (*GetGaragesRequest) Descriptor() ([]byte, []int) {
 	return file_app_api_service_v1_app_api_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetGaragesRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
 }
 
 type Garage struct {
@@ -657,20 +737,30 @@ const file_app_api_service_v1_app_api_service_proto_rawDesc = "" +
 	"\n" +
 	"(app_api_service/v1/app_api_service.proto\x12\x12app_api_service.v1\"\x18\n" +
 	"\x16ConnectionCheckRequest\"\x19\n" +
-	"\x17ConnectionCheckResponse\"M\n" +
+	"\x17ConnectionCheckResponse\"_\n" +
 	"\x13RegisterUserRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x16\n" +
-	"\x14RegisterUserResponse\"G\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x10\n" +
+	"\x03csr\x18\x03 \x01(\tR\x03csr\"m\n" +
+	"\x14RegisterUserResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12 \n" +
+	"\vcertificate\x18\x03 \x01(\tR\vcertificate\"Y\n" +
 	"\rSignInRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x10\n" +
-	"\x0eSignInResponse\"3\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x10\n" +
+	"\x03csr\x18\x03 \x01(\tR\x03csr\"g\n" +
+	"\x0eSignInResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12 \n" +
+	"\vcertificate\x18\x03 \x01(\tR\vcertificate\"L\n" +
 	"\x10NewGarageRequest\x12\x1f\n" +
 	"\vgarage_name\x18\x01 \x01(\tR\n" +
-	"garageName\"\x13\n" +
-	"\x11NewGarageResponse\"\x13\n" +
-	"\x11GetGaragesRequest\"9\n" +
+	"garageName\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x13\n" +
+	"\x11NewGarageResponse\",\n" +
+	"\x11GetGaragesRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"9\n" +
 	"\x06Garage\x12\x1f\n" +
 	"\vgarage_name\x18\x01 \x01(\tR\n" +
 	"garageName\x12\x0e\n" +
@@ -689,11 +779,12 @@ const file_app_api_service_v1_app_api_service_proto_rawDesc = "" +
 	"gestureSeq\x12\x1b\n" +
 	"\tvideo_url\x18\x05 \x01(\tR\bvideoUrl\"U\n" +
 	"\x1bGetGarageByGarageIdResponse\x126\n" +
-	"\x06garage\x18\x01 \x01(\v2\x1e.app_api_service.v1.GarageInfoR\x06garage2\xea\x04\n" +
+	"\x06garage\x18\x01 \x01(\v2\x1e.app_api_service.v1.GarageInfoR\x06garage2\xb5\x02\n" +
 	"\rAppApiService\x12l\n" +
 	"\x0fConnectionCheck\x12*.app_api_service.v1.ConnectionCheckRequest\x1a+.app_api_service.v1.ConnectionCheckResponse\"\x00\x12c\n" +
 	"\fRegisterUser\x12'.app_api_service.v1.RegisterUserRequest\x1a(.app_api_service.v1.RegisterUserResponse\"\x00\x12Q\n" +
-	"\x06SignIn\x12!.app_api_service.v1.SignInRequest\x1a\".app_api_service.v1.SignInResponse\"\x00\x12Z\n" +
+	"\x06SignIn\x12!.app_api_service.v1.SignInRequest\x1a\".app_api_service.v1.SignInResponse\"\x002\xca\x02\n" +
+	"\x13AuthedAppApiService\x12Z\n" +
 	"\tNewGarage\x12$.app_api_service.v1.NewGarageRequest\x1a%.app_api_service.v1.NewGarageResponse\"\x00\x12]\n" +
 	"\n" +
 	"GetGarages\x12%.app_api_service.v1.GetGaragesRequest\x1a&.app_api_service.v1.GetGaragesResponse\"\x00\x12x\n" +
@@ -734,15 +825,15 @@ var file_app_api_service_v1_app_api_service_proto_depIdxs = []int32{
 	0,  // 2: app_api_service.v1.AppApiService.ConnectionCheck:input_type -> app_api_service.v1.ConnectionCheckRequest
 	2,  // 3: app_api_service.v1.AppApiService.RegisterUser:input_type -> app_api_service.v1.RegisterUserRequest
 	4,  // 4: app_api_service.v1.AppApiService.SignIn:input_type -> app_api_service.v1.SignInRequest
-	6,  // 5: app_api_service.v1.AppApiService.NewGarage:input_type -> app_api_service.v1.NewGarageRequest
-	8,  // 6: app_api_service.v1.AppApiService.GetGarages:input_type -> app_api_service.v1.GetGaragesRequest
-	11, // 7: app_api_service.v1.AppApiService.GetGarageByGarageId:input_type -> app_api_service.v1.GetGarageByGarageIdRequest
+	6,  // 5: app_api_service.v1.AuthedAppApiService.NewGarage:input_type -> app_api_service.v1.NewGarageRequest
+	8,  // 6: app_api_service.v1.AuthedAppApiService.GetGarages:input_type -> app_api_service.v1.GetGaragesRequest
+	11, // 7: app_api_service.v1.AuthedAppApiService.GetGarageByGarageId:input_type -> app_api_service.v1.GetGarageByGarageIdRequest
 	1,  // 8: app_api_service.v1.AppApiService.ConnectionCheck:output_type -> app_api_service.v1.ConnectionCheckResponse
 	3,  // 9: app_api_service.v1.AppApiService.RegisterUser:output_type -> app_api_service.v1.RegisterUserResponse
 	5,  // 10: app_api_service.v1.AppApiService.SignIn:output_type -> app_api_service.v1.SignInResponse
-	7,  // 11: app_api_service.v1.AppApiService.NewGarage:output_type -> app_api_service.v1.NewGarageResponse
-	10, // 12: app_api_service.v1.AppApiService.GetGarages:output_type -> app_api_service.v1.GetGaragesResponse
-	13, // 13: app_api_service.v1.AppApiService.GetGarageByGarageId:output_type -> app_api_service.v1.GetGarageByGarageIdResponse
+	7,  // 11: app_api_service.v1.AuthedAppApiService.NewGarage:output_type -> app_api_service.v1.NewGarageResponse
+	10, // 12: app_api_service.v1.AuthedAppApiService.GetGarages:output_type -> app_api_service.v1.GetGaragesResponse
+	13, // 13: app_api_service.v1.AuthedAppApiService.GetGarageByGarageId:output_type -> app_api_service.v1.GetGarageByGarageIdResponse
 	8,  // [8:14] is the sub-list for method output_type
 	2,  // [2:8] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
@@ -763,7 +854,7 @@ func file_app_api_service_v1_app_api_service_proto_init() {
 			NumEnums:      0,
 			NumMessages:   14,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_app_api_service_v1_app_api_service_proto_goTypes,
 		DependencyIndexes: file_app_api_service_v1_app_api_service_proto_depIdxs,

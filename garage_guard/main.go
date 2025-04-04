@@ -4,14 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	apphandler "garage_guard/app_handler"
-	"garage_guard/intercept"
 	"garage_guard/proto/gen/app_api_service/v1/appApiServicev1connect"
 	"garage_guard/sql/db"
 	"log"
 	"net/http"
 	"os"
 
-	"connectrpc.com/connect"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/sync/errgroup"
 )
@@ -31,14 +29,11 @@ func main() {
 
 	pgDB := db.New(dbConn)
 
-	//interceptors
-	interceptors := connect.WithInterceptors(intercept.AppAuthIntercepter())
-
+	// Unauthed app path
 	muxApp := http.NewServeMux()
 
 	muxApp.Handle(appApiServicev1connect.NewAppApiServiceHandler(
 		&apphandler.AppHandler{DataQuery: pgDB, DbConn: dbConn},
-		interceptors,
 	))
 
 	//get certificate
@@ -66,11 +61,33 @@ func main() {
 		},
 	}
 
+	// Authed app path
+	muxAuth := http.NewServeMux()
+	muxAuth.Handle(appApiServicev1connect.NewAuthedAppApiServiceHandler(
+		&apphandler.AuthedAppHandler{DataQuery: pgDB, DbConn: dbConn},
+	))
+
+	authAppServer := &http.Server{
+		Addr:    ":444",
+		Handler: muxAuth,
+		TLSConfig: &tls.Config{
+			MinVersion:   tls.VersionTLS13,
+			Certificates: []tls.Certificate{cK},
+		},
+	}
 	erg, _ := errgroup.WithContext(context.Background())
 	log.Println("server about to start")
+
+	// Run unauthed app path server
 	erg.Go(func() error {
 		return appServer.ListenAndServeTLS("", "")
 	})
+
+	// Run authed app path server
+	erg.Go(func() error {
+		return authAppServer.ListenAndServeTLS("", "")
+	})
+
 	log.Println("server running")
 	if err := erg.Wait(); err != nil {
 		log.Fatal(err)

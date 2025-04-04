@@ -61,7 +61,8 @@ extension type AppApiServiceClient (connect.Transport _transport) {
       onTrailer: onTrailer,
     );
   }
-
+}
+extension type AuthedAppApiServiceClient (connect.Transport _transport) {
   /// Adds a new garage where the user can register a device and cars
   /// The user that created the garage is registered as the admin
   Future<app_api_servicev1app_api_service.NewGarageResponse> newGarage(
@@ -72,7 +73,7 @@ extension type AppApiServiceClient (connect.Transport _transport) {
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AppApiService.newGarage,
+      specs.AuthedAppApiService.newGarage,
       input,
       signal: signal,
       headers: headers,
@@ -90,7 +91,7 @@ extension type AppApiServiceClient (connect.Transport _transport) {
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AppApiService.getGarages,
+      specs.AuthedAppApiService.getGarages,
       input,
       signal: signal,
       headers: headers,
@@ -108,7 +109,7 @@ extension type AppApiServiceClient (connect.Transport _transport) {
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AppApiService.getGarageByGarageId,
+      specs.AuthedAppApiService.getGarageByGarageId,
       input,
       signal: signal,
       headers: headers,

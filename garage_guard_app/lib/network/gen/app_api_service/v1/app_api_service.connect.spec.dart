@@ -33,6 +33,10 @@ abstract final class AppApiService {
     app_api_servicev1app_api_service.SignInRequest.new,
     app_api_servicev1app_api_service.SignInResponse.new,
   );
+}
+abstract final class AuthedAppApiService {
+  /// Fully-qualified name of the AuthedAppApiService service.
+  static const name = 'app_api_service.v1.AuthedAppApiService';
 
   /// Adds a new garage where the user can register a device and cars
   /// The user that created the garage is registered as the admin

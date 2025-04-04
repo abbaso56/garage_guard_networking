@@ -14,8 +14,14 @@ service AppApiService{
 
     // Signs in given the required credintials
     rpc SignIn(SignInRequest) returns (SignInResponse){}
+
+    
     
 
+   
+}
+
+service AuthedAppApiService{
     // Adds a new garage where the user can register a device and cars
     // The user that created the garage is registered as the admin
     rpc NewGarage(NewGarageRequest) returns (NewGarageResponse){}
@@ -67,11 +73,15 @@ message ConnectionCheckResponse{}
 message RegisterUserRequest{
     string username = 1;
     string password = 2;
+    string csr = 3;
 }
 
  
 // Response from server with a jwt token for the authenticated session
 message RegisterUserResponse{
+    string user_id = 1;
+    string username = 2;
+    string certificate = 3;
 }
 
 
@@ -85,16 +95,25 @@ message RegisterUserResponse{
 message SignInRequest{
     string username = 1;
     string password = 2;
+    string csr = 3;
 }
 
 
 // Server validates user and then sends a token for the authenticated session
 message SignInResponse{
+    string user_id = 1;
+    string username = 2;
+    string certificate = 3;
 }
 
 
 
 
+//-------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// AuthedAppApiService-----------------------------------------------------------------------------------------------
 
 //-------------------------------------
 // NewGarage
@@ -102,6 +121,7 @@ message SignInResponse{
 // Creates a new garage resource with the user that created the garage being the admin
 message NewGarageRequest{
     string garage_name = 1; 
+    string user_id = 2;
 }
 
 // Responds to the garage request to indicate the status of the request
@@ -117,6 +137,7 @@ message NewGarageResponse{
 // GetGarages
 
 message GetGaragesRequest{
+    string user_id =1;
 }
 
 message Garage{

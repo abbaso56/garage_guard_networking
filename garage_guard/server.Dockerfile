@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y ca-certificates
 
 COPY ./root_ca/rootCA.crt /usr/local/share/ca-certificates/
 
+COPY ./root_ca/rootCA.key /usr/server_tls/rootCA.key
+
+
 COPY ./server_tls  usr/server_tls
 
 COPY ./jwt_key /usr/keys/jwt_key

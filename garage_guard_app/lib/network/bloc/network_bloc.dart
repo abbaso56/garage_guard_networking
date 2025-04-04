@@ -12,6 +12,7 @@ import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.spec.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.pb.dart';
 import 'package:garage_guard_app/network/intercept/token_interceptor.dart';
+import 'package:garage_guard_app/network/repo/network_repository.dart';
 
 part 'network_event.dart';
 part 'network_state.dart';
@@ -25,28 +26,29 @@ final List<Interceptor> interceptList= [
 
 
 class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
-  var _bUrl = defUrl;
+  // var _bUrl = defUrl;
   final HttpClient clientinfo ;
   
-  var connected = "disconnected";
-  String get bUrl => _bUrl;
+  // var connected = "disconnected";
+  // String get bUrl => _bUrl;
 
-  AppApiServiceClient appClient;
-  set clientURL( String newBaseUrl){
-    final transport = protocol.Transport(
-    baseUrl: newBaseUrl,
-    codec: const ProtoCodec(), 
-    httpClient:  clientinfo,
-    statusParser: const StatusParser(),
-    interceptors: interceptList,
-    );
+  // AppApiServiceClient networkRepo.appClient;
 
-    appClient = AppApiServiceClient(transport);
+  // set clientURL( String newBaseUrl){
+  //   final transport = protocol.Transport(
+  //   baseUrl: newBaseUrl,
+  //   codec: const ProtoCodec(), 
+  //   httpClient:  clientinfo,
+  //   statusParser: const StatusParser(),
+  //   );
+
+  //   networkRepo.appClient = AppApiServiceClient(transport);
 
 
 
-  }
+  // }
 
+  NetworkRepository networkRepo;
 
 
   // @override
@@ -66,16 +68,18 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
 
   NetworkBloc({required this.clientinfo}) : 
-    appClient = AppApiServiceClient(protocol.Transport(
-    baseUrl: defUrl,
-    codec: const ProtoCodec(), 
-    httpClient:  clientinfo,
-    statusParser: const StatusParser(),
-    interceptors: interceptList)),
+    // networkRepo.appClient = AppApiServiceClient(protocol.Transport(
+    // baseUrl: defUrl,
+    // codec: const ProtoCodec(), 
+    // httpClient:  clientinfo,
+    // statusParser: const StatusParser(),
+    // interceptors: interceptList)),
+
+
+    //network repo where netework related storage is handled
+    networkRepo = NetworkRepository(clientinfo: clientinfo),
   
-  
-  
-  super(NetworkBaseState()){
+    super(NetworkBaseState()){
 
 
 
@@ -84,8 +88,15 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     on<NetworkNewIp>((event,emit){
       final newBaseUrl = "https://${event.newIp.replaceAll(RegExp(r"\s+\b|\b\s+"), "")}:${event.newPort.replaceAll(RegExp(r"\s+\b|\b\s"), "")}";
       log(newBaseUrl);
-      clientURL = newBaseUrl;
-      _bUrl = newBaseUrl;
+      
+      // clientURL = newBaseUrl;
+      // _bUrl = newBaseUrl;
+      
+
+      networkRepo.clientURL = newBaseUrl;
+
+
+
       final prevState = state;
       emit(NetworkNewIpState());
       emit(prevState);
@@ -95,11 +106,11 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     // Check connection to server
     on<NetworkConnecionCheck>((event,emit) async{
       
-      final req = appClient.connectionCheck(ConnectionCheckRequest());
+      final req = networkRepo.appClient.connectionCheck(ConnectionCheckRequest());
       emit(NetworkConnecionCheckRequestState());
-      connected = "connecting";
+      networkRepo.connected = "connecting";
       await req;
-      connected = "Connected";
+      networkRepo.connected = "Connected";
       emit(NetworkConnecionCheckResponseState());
       emit(NetworkBaseState());
     });
@@ -107,10 +118,20 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
     // Register user call 
     on<NetworkRegisterUser>((event, emit) async{
-      final req  = appClient.registerUser(RegisterUserRequest(username: event.username,password:  event.password));
+
+      // create certificate signing request
+      final csr = networkRepo.createCSR();
+
+      final req  = networkRepo.appClient.registerUser(RegisterUserRequest(username: event.username,password:  event.password, csr:csr));
       emit(NetworkRegisterUserRequestState());
       log("registering");
-      await req;
+      
+
+      final resp = await req;
+      networkRepo.authenticated(resp.certificate);
+
+
+
       log("registered");
       emit(NetworkRegisterUserResponseState());
       emit(NetworkLoggedInState());
@@ -119,11 +140,18 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
     // Sign in call
     on<NetworkSignIn>((event, emit) async {
-      final req  = appClient.signIn(SignInRequest(username: event.username,password:  event.password));
+
+      // create certificate signing request
+      final csr = networkRepo.createCSR();
+      final req = networkRepo.appClient.signIn(SignInRequest(username: event.username,password:  event.password, csr: csr));
       emit(NetworkSignInRequestState());
       log("Signing in");
-      await req;
+
+      final resp = await req;
+      networkRepo.authenticated(resp.certificate);
       log("Signed in");
+
+      
       emit(NetworkSignInResponseState());
       emit(NetworkLoggedInState());
     },);
@@ -132,7 +160,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
     // Get garages registerd to the account
     on<NetworkGetGarages>((event, emit) async{
-      final req = appClient.getGarages(GetGaragesRequest());
+      final req = networkRepo.authedAppClient!.getGarages(GetGaragesRequest());
       emit(NetworkGetGaragesRequestState());
       log("Getting Garages for user");
 
@@ -149,7 +177,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     // The user is the admin since they added the garage
 
     on<NetworkNewGarage>((event, emit) async{
-      final req = appClient.newGarage(NewGarageRequest(garageName: event.garageName));
+      final req = networkRepo.authedAppClient!.newGarage(NewGarageRequest(garageName: event.garageName));
       emit(NetworkNewGarageRequestState());
 
       await req;
@@ -165,7 +193,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     // For now doesn't get created at or updated at
 
     on<NetworkGetGarageByGarageId>((event, emit) async{
-      final req = appClient.getGarageByGarageId(GetGarageByGarageIdRequest(id: event.id));
+      final req = networkRepo.authedAppClient!.getGarageByGarageId(GetGarageByGarageIdRequest(id: event.id));
       emit(NetworkGetGarageByGarageIdRequestState());
 
       final resp = await req;

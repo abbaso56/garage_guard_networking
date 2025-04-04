@@ -12,7 +12,6 @@ import (
 	"connectrpc.com/connect"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -52,27 +51,24 @@ func (appSrv *AppHandler) RegisterUser(ctx context.Context, req *connect.Request
 		CreatedAt: helpers.PgTime(timeNow),
 		UpdatedAt: helpers.PgTime(timeNow),
 	})
-
-	//responds with error
 	if err != nil {
-		return nil, connect.NewError(connect.CodeUnknown, err)
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	// Creates Jwt for future auth
-	respJwt, err := helpers.CreateAppJwt(id, req.Msg.Username)
-
-	//responds with error
+	// Creates a new  certificate for the user
+	cert, err := helpers.CreateClientCert(req.Msg.Csr, id)
 	if err != nil {
-
-		return nil, connect.NewError(connect.CodeUnknown, err)
+		log.Printf("Error creating client cert: %v", err)
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	// Creates Jwt for future auth
-	//FIX-----------------------------------------------------------
+	// Sends  respon
+	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{
+		UserId:      string(id[:]),
+		Username:    req.Msg.Username,
+		Certificate: cert,
+	})
 
-	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{})
-	//FIX-----------------------------------------------------------
-	resp.Header().Add("ID", string(respJwt))
 	return resp, nil
 }
 
@@ -91,145 +87,19 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 		return nil, connect.NewError(connect.CodeUnknown, err)
 	}
 
-	// Creates Jwt for future auth
-	respJwt, err := helpers.CreateAppJwt(userEntry.ID.Bytes, req.Msg.Username)
+	// Creates client certificate for app
+	cert, err := helpers.CreateClientCert(req.Msg.Csr, userEntry.ID.Bytes)
 	if err != nil {
-
-		return nil, connect.NewError(connect.CodeUnknown, err)
+		log.Printf("Error creating client cert: %v", err)
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	//responds with JWT
 
-	resp := connect.NewResponse(&appApiServicev1.SignInResponse{})
-
-	resp.Header().Add("jwt", string())
-
-	return resp, nil
-
-}
-
-func (appSrv *AppHandler) NewGarage(ctx context.Context, req *connect.Request[appApiServicev1.NewGarageRequest]) (*connect.Response[appApiServicev1.NewGarageResponse], error) {
-	log.Println("NewGarage called")
-	//read data from request
-
-	garageName := req.Msg.GarageName
-
-	id := uuid.New()
-
-	timeNow := time.Now().UTC()
-
-	//get the user add from jwt passed by the auth intercepter
-	jwtBody := ctx.Value("jwtBody").(helpers.UserJwtBody)
-	userId := jwtBody.UserId
-
-	//database transaction
-	tx, err := appSrv.DbConn.Begin(ctx)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	defer tx.Rollback(ctx)
-
-	q := appSrv.DataQuery.WithTx(tx)
-	_, err = q.CreateGarage(ctx, db.CreateGarageParams{
-		ID:         helpers.PgUuid(id),
-		GarageName: garageName,
-		DeviceID:   pgtype.UUID{Bytes: [16]byte{}, Valid: false},
-		GestureSeq: pgtype.Text{String: "", Valid: false},
-		CreatedAt:  helpers.PgTime(timeNow),
-		UpdatedAt:  helpers.PgTime(timeNow),
-		VideoUrl:   pgtype.Text{String: "", Valid: false},
-	})
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-
-	_, err = q.CreateGargeUserRelation(ctx, db.CreateGargeUserRelationParams{
-		GarageID:  helpers.PgUuid(id),
-		UserID:    helpers.PgUuid(userId),
-		IsAdmin:   true,
-		CreatedAt: helpers.PgTime(timeNow),
-		UpdatedAt: helpers.PgTime(timeNow),
-	})
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-
-	err = tx.Commit(ctx)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-
-	resp := connect.NewResponse(&appApiServicev1.NewGarageResponse{})
-
-	return resp, nil
-
-}
-
-func (appSrv *AppHandler) GetGarages(ctx context.Context, req *connect.Request[appApiServicev1.GetGaragesRequest]) (*connect.Response[appApiServicev1.GetGaragesResponse], error) {
-	log.Println("GetGarages called")
-	//get the user add from jwt passed by the auth intercepter
-	jwtBody := ctx.Value("jwtBody").(helpers.UserJwtBody)
-	userId := jwtBody.UserId
-
-	// gets the garage names for th user
-	garageData, err := appSrv.DataQuery.GetGarageNamesByuserId(ctx, helpers.PgUuid(userId))
-
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-
-	// creates the response inputing the names into a pointer array of garage messages
-	garages := make([]*appApiServicev1.Garage, len(garageData))
-
-	for i, g := range garageData {
-		garages[i].GarageName = g.GarageName
-		garages[i].Id = string(g.ID.Bytes[:])
-	}
-
-	resp := connect.NewResponse(&appApiServicev1.GetGaragesResponse{
-		Garages: garages,
-	})
-	return resp, nil
-}
-
-func (appSrv *AppHandler) GetGarageByGarageID(ctx context.Context, req *connect.Request[appApiServicev1.GetGarageByGarageIdRequest]) (*connect.Response[appApiServicev1.GetGarageByGarageIdResponse], error) {
-	log.Println("GetGaragesByGarageID called")
-	// Grab the garage id
-	id := pgtype.UUID{
-		Bytes: [16]byte([]byte(req.Msg.GetId())),
-		Valid: true,
-	}
-
-	// Query the database for the garage data
-	garageData, err := appSrv.DataQuery.GetGarageById(ctx, id)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-
-	// check if these fields are null
-	deviceID := ""
-	if garageData.DeviceID.Valid {
-		deviceID = string(garageData.DeviceID.Bytes[:])
-	}
-
-	gestureSeq := ""
-	if garageData.GestureSeq.Valid {
-		gestureSeq = garageData.GestureSeq.String
-	}
-	videoUrl := ""
-	if garageData.VideoUrl.Valid {
-		videoUrl = garageData.VideoUrl.String
-	}
-
-	// Create and send the response
-	resp := connect.NewResponse(&appApiServicev1.GetGarageByGarageIdResponse{
-		Garage: &appApiServicev1.GarageInfo{
-			Id:         string(garageData.ID.Bytes[:]),
-			GarageName: garageData.GarageName,
-			DeviceId:   deviceID,
-			GestureSeq: gestureSeq,
-			VideoUrl:   videoUrl,
-		},
+	resp := connect.NewResponse(&appApiServicev1.SignInResponse{
+		UserId:      string(userEntry.ID.Bytes[:]),
+		Username:    userEntry.Username,
+		Certificate: cert,
 	})
 
 	return resp, nil

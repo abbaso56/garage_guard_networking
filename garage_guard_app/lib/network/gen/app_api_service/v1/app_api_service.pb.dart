@@ -84,6 +84,7 @@ class RegisterUserRequest extends $pb.GeneratedMessage {
   factory RegisterUserRequest({
     $core.String? username,
     $core.String? password,
+    $core.String? csr,
   }) {
     final $result = create();
     if (username != null) {
@@ -91,6 +92,9 @@ class RegisterUserRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       $result.password = password;
+    }
+    if (csr != null) {
+      $result.csr = csr;
     }
     return $result;
   }
@@ -101,6 +105,7 @@ class RegisterUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RegisterUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
     ..aOS(2, _omitFieldNames ? '' : 'password')
+    ..aOS(3, _omitFieldNames ? '' : 'csr')
     ..hasRequiredFields = false
   ;
 
@@ -142,16 +147,44 @@ class RegisterUserRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get csr => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set csr($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCsr() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCsr() => clearField(3);
 }
 
 /// Response from server with a jwt token for the authenticated session
 class RegisterUserResponse extends $pb.GeneratedMessage {
-  factory RegisterUserResponse() => create();
+  factory RegisterUserResponse({
+    $core.String? userId,
+    $core.String? username,
+    $core.String? certificate,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (username != null) {
+      $result.username = username;
+    }
+    if (certificate != null) {
+      $result.certificate = certificate;
+    }
+    return $result;
+  }
   RegisterUserResponse._() : super();
   factory RegisterUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RegisterUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RegisterUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(2, _omitFieldNames ? '' : 'username')
+    ..aOS(3, _omitFieldNames ? '' : 'certificate')
     ..hasRequiredFields = false
   ;
 
@@ -175,6 +208,33 @@ class RegisterUserResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RegisterUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RegisterUserResponse>(create);
   static RegisterUserResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get username => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set username($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUsername() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUsername() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get certificate => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set certificate($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCertificate() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCertificate() => clearField(3);
 }
 
 /// User sends credintials for authentication
@@ -182,6 +242,7 @@ class SignInRequest extends $pb.GeneratedMessage {
   factory SignInRequest({
     $core.String? username,
     $core.String? password,
+    $core.String? csr,
   }) {
     final $result = create();
     if (username != null) {
@@ -189,6 +250,9 @@ class SignInRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       $result.password = password;
+    }
+    if (csr != null) {
+      $result.csr = csr;
     }
     return $result;
   }
@@ -199,6 +263,7 @@ class SignInRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SignInRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
     ..aOS(2, _omitFieldNames ? '' : 'password')
+    ..aOS(3, _omitFieldNames ? '' : 'csr')
     ..hasRequiredFields = false
   ;
 
@@ -240,16 +305,44 @@ class SignInRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get csr => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set csr($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCsr() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCsr() => clearField(3);
 }
 
 /// Server validates user and then sends a token for the authenticated session
 class SignInResponse extends $pb.GeneratedMessage {
-  factory SignInResponse() => create();
+  factory SignInResponse({
+    $core.String? userId,
+    $core.String? username,
+    $core.String? certificate,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (username != null) {
+      $result.username = username;
+    }
+    if (certificate != null) {
+      $result.certificate = certificate;
+    }
+    return $result;
+  }
   SignInResponse._() : super();
   factory SignInResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SignInResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SignInResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(2, _omitFieldNames ? '' : 'username')
+    ..aOS(3, _omitFieldNames ? '' : 'certificate')
     ..hasRequiredFields = false
   ;
 
@@ -273,16 +366,47 @@ class SignInResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static SignInResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignInResponse>(create);
   static SignInResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get username => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set username($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUsername() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUsername() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get certificate => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set certificate($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCertificate() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCertificate() => clearField(3);
 }
 
 /// Creates a new garage resource with the user that created the garage being the admin
 class NewGarageRequest extends $pb.GeneratedMessage {
   factory NewGarageRequest({
     $core.String? garageName,
+    $core.String? userId,
   }) {
     final $result = create();
     if (garageName != null) {
       $result.garageName = garageName;
+    }
+    if (userId != null) {
+      $result.userId = userId;
     }
     return $result;
   }
@@ -292,6 +416,7 @@ class NewGarageRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NewGarageRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'garageName')
+    ..aOS(2, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -324,6 +449,15 @@ class NewGarageRequest extends $pb.GeneratedMessage {
   $core.bool hasGarageName() => $_has(0);
   @$pb.TagNumber(1)
   void clearGarageName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get userId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set userId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUserId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUserId() => clearField(2);
 }
 
 class NewGarageResponse extends $pb.GeneratedMessage {
@@ -359,12 +493,21 @@ class NewGarageResponse extends $pb.GeneratedMessage {
 }
 
 class GetGaragesRequest extends $pb.GeneratedMessage {
-  factory GetGaragesRequest() => create();
+  factory GetGaragesRequest({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   GetGaragesRequest._() : super();
   factory GetGaragesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetGaragesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGaragesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -388,6 +531,15 @@ class GetGaragesRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetGaragesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGaragesRequest>(create);
   static GetGaragesRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
 }
 
 class Garage extends $pb.GeneratedMessage {
@@ -719,14 +871,20 @@ class AppApiServiceApi {
   $async.Future<SignInResponse> signIn($pb.ClientContext? ctx, SignInRequest request) =>
     _client.invoke<SignInResponse>(ctx, 'AppApiService', 'SignIn', request, SignInResponse())
   ;
+}
+
+class AuthedAppApiServiceApi {
+  $pb.RpcClient _client;
+  AuthedAppApiServiceApi(this._client);
+
   $async.Future<NewGarageResponse> newGarage($pb.ClientContext? ctx, NewGarageRequest request) =>
-    _client.invoke<NewGarageResponse>(ctx, 'AppApiService', 'NewGarage', request, NewGarageResponse())
+    _client.invoke<NewGarageResponse>(ctx, 'AuthedAppApiService', 'NewGarage', request, NewGarageResponse())
   ;
   $async.Future<GetGaragesResponse> getGarages($pb.ClientContext? ctx, GetGaragesRequest request) =>
-    _client.invoke<GetGaragesResponse>(ctx, 'AppApiService', 'GetGarages', request, GetGaragesResponse())
+    _client.invoke<GetGaragesResponse>(ctx, 'AuthedAppApiService', 'GetGarages', request, GetGaragesResponse())
   ;
   $async.Future<GetGarageByGarageIdResponse> getGarageByGarageId($pb.ClientContext? ctx, GetGarageByGarageIdRequest request) =>
-    _client.invoke<GetGarageByGarageIdResponse>(ctx, 'AppApiService', 'GetGarageByGarageId', request, GetGarageByGarageIdResponse())
+    _client.invoke<GetGarageByGarageIdResponse>(ctx, 'AuthedAppApiService', 'GetGarageByGarageId', request, GetGarageByGarageIdResponse())
   ;
 }
 
