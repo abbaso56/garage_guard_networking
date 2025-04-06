@@ -51,12 +51,24 @@ abstract class AuthedAppApiServiceBase extends $pb.GeneratedService {
   $async.Future<$0.NewGarageResponse> newGarage($pb.ServerContext ctx, $0.NewGarageRequest request);
   $async.Future<$0.GetGaragesResponse> getGarages($pb.ServerContext ctx, $0.GetGaragesRequest request);
   $async.Future<$0.GetGarageByGarageIdResponse> getGarageByGarageId($pb.ServerContext ctx, $0.GetGarageByGarageIdRequest request);
+  $async.Future<$0.AddNewCarResponse> addNewCar($pb.ServerContext ctx, $0.AddNewCarRequest request);
+  $async.Future<$0.UpdateGestureSeqResponse> updateGestureSeq($pb.ServerContext ctx, $0.UpdateGestureSeqRequest request);
+  $async.Future<$0.GetCarsInGarageResponse> getCarsInGarage($pb.ServerContext ctx, $0.GetCarsInGarageRequest request);
+  $async.Future<$0.GetGarageDeviceResponse> getGarageDevice($pb.ServerContext ctx, $0.GetGarageDeviceRequest request);
+  $async.Future<$0.AddDeviceIdResponse> addDeviceId($pb.ServerContext ctx, $0.AddDeviceIdRequest request);
+  $async.Future<$0.AddGarageIdResponse> addGarageId($pb.ServerContext ctx, $0.AddGarageIdRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
       case 'NewGarage': return $0.NewGarageRequest();
       case 'GetGarages': return $0.GetGaragesRequest();
       case 'GetGarageByGarageId': return $0.GetGarageByGarageIdRequest();
+      case 'AddNewCar': return $0.AddNewCarRequest();
+      case 'UpdateGestureSeq': return $0.UpdateGestureSeqRequest();
+      case 'GetCarsInGarage': return $0.GetCarsInGarageRequest();
+      case 'GetGarageDevice': return $0.GetGarageDeviceRequest();
+      case 'AddDeviceId': return $0.AddDeviceIdRequest();
+      case 'AddGarageId': return $0.AddGarageIdRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -66,6 +78,12 @@ abstract class AuthedAppApiServiceBase extends $pb.GeneratedService {
       case 'NewGarage': return this.newGarage(ctx, request as $0.NewGarageRequest);
       case 'GetGarages': return this.getGarages(ctx, request as $0.GetGaragesRequest);
       case 'GetGarageByGarageId': return this.getGarageByGarageId(ctx, request as $0.GetGarageByGarageIdRequest);
+      case 'AddNewCar': return this.addNewCar(ctx, request as $0.AddNewCarRequest);
+      case 'UpdateGestureSeq': return this.updateGestureSeq(ctx, request as $0.UpdateGestureSeqRequest);
+      case 'GetCarsInGarage': return this.getCarsInGarage(ctx, request as $0.GetCarsInGarageRequest);
+      case 'GetGarageDevice': return this.getGarageDevice(ctx, request as $0.GetGarageDeviceRequest);
+      case 'AddDeviceId': return this.addDeviceId(ctx, request as $0.AddDeviceIdRequest);
+      case 'AddGarageId': return this.addGarageId(ctx, request as $0.AddGarageIdRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

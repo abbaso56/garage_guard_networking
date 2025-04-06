@@ -13,12 +13,16 @@ import (
 	"math/big"
 	"os"
 	"time"
+	"unicode/utf8"
 
 	"github.com/google/uuid"
 )
 
 func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
-
+	if !utf8.ValidString(csrPem) {
+		log.Printf("Invalid UTF-8 in CSR")
+		return "", errors.New("invalid UTF-8 in CSR")
+	}
 	//parsing the CSR since it was sent over as a string PEM
 	csrBlock, _ := pem.Decode([]byte(csrPem))
 	if csrBlock == nil {
@@ -45,7 +49,7 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 	}
 
 	// Get the ca Cert
-	caCertPemBytes, err := os.ReadFile("usr/local/share/ca-certificates/rootCa.crt")
+	caCertPemBytes, err := os.ReadFile("usr/server_tls/srv.crt")
 	if err != nil {
 		log.Printf("Error loading ca cert: %v", err)
 		return "", err
@@ -64,7 +68,7 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 	}
 
 	// Get the  ca key
-	caKeyPemBytes, err := os.ReadFile("usr/server_tls/rootCa.key")
+	caKeyPemBytes, err := os.ReadFile("usr/server_tls/srv.key")
 	if err != nil {
 		log.Printf("Error loading ca key: %v", err)
 		return "", err
@@ -76,7 +80,7 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 		return "", errors.New("error decoding ca key pem block")
 	}
 
-	caKey, err := x509.ParsePKCS8PrivateKey(caKeyBlock.Bytes)
+	caKey, err := x509.ParseECPrivateKey(caKeyBlock.Bytes)
 	if err != nil {
 		log.Printf("Error parsing ca key: %v", err)
 		return "", err
@@ -120,6 +124,10 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 		Type:  "CERTIFICATE",
 		Bytes: cert,
 	})
+	if !utf8.ValidString(certPEM.String()) {
+		log.Printf("Invalid UTF-8 in CST")
+		return "", errors.New("invalid UTF-8 in CST")
+	}
 
 	return certPEM.String(), nil
 

@@ -38,11 +38,28 @@ service AuthedAppApiService{
     rpc GetGarageByGarageId(GetGarageByGarageIdRequest) returns (GetGarageByGarageIdResponse){}
 
 
+
+    // Adds as new car to a garage
+    rpc AddNewCar(AddNewCarRequest) returns (AddNewCarResponse){}
+
+
+    // Update gesture sequence for garage 
+    rpc UpdateGestureSeq (UpdateGestureSeqRequest) returns (UpdateGestureSeqResponse){}  
+
+
+
+
     // Get cars registered to a garage
-    //rpc GetCarsInGarage(GetCarsInGarageRequest) returns (GetCarsInGarageResponse){}
+    rpc GetCarsInGarage(GetCarsInGarageRequest) returns (GetCarsInGarageResponse){}
     
     // Get device id form garage
-    //rpc GetGarageDevice(GetGarageDeviceRequest) returns (GetGarageDeviceResponse){}
+    rpc GetGarageDevice(GetGarageDeviceRequest) returns (GetGarageDeviceResponse){}
+
+    // Adds device id 
+    rpc AddDeviceId(AddDeviceIdRequest) returns (AddDeviceIdResponse){}
+
+    // Add garage id
+    rpc AddGarageId (AddGarageIdRequest) returns (AddGarageIdResponse){}
 
     // Grants garage access to another user
 
@@ -172,4 +189,80 @@ message GarageInfo{
 }
 message GetGarageByGarageIdResponse{
     GarageInfo garage = 1;
+}
+
+
+
+//-------------------------------------
+//AddNewCar
+
+message AddNewCarRequest{
+    string garage_id = 1;
+    string license_plate = 2;
+}
+
+
+message AddNewCarResponse{
+    bool status = 1;
+}
+
+
+//-------------------------------------
+//UpdateGestureSeq
+
+// numbers representing different gestures sent as a string separated by commas
+// 1,2,3,5,6,8
+message UpdateGestureSeqRequest{
+    string gesture_seq = 1;
+}
+
+message UpdateGestureSeqResponse{
+    bool status = 1;
+}
+
+
+//-------------------------------------
+//GetCarsInGarage
+
+message GetCarsInGarageRequest{
+    string garage_id = 1;
+}
+
+message GetCarsInGarageResponse{
+    repeated string license_plate = 1;
+}
+
+//-------------------------------------
+//GetGarageDevice
+
+message GetGarageDeviceRequest{
+    string garage_id = 1;
+}
+
+message GetGarageDeviceResponse{
+    string device_id = 1;
+}
+
+//-------------------------------------
+// AddDeviceId
+
+message AddDeviceIdRequest{
+    string garage_id = 1;
+    string device_id = 2;
+}
+
+message AddDeviceIdResponse{
+    bool status = 1;
+}
+
+//-------------------------------------
+//AddGarageId
+
+message AddGarageIdRequest{
+    string user_id = 1;
+    string garage_id = 2;
+}
+
+message AddGarageIdResponse{
+    bool status = 1;
 }

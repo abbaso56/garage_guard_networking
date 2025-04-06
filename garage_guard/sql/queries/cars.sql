@@ -7,5 +7,11 @@ RETURNING *;
 -- name: GetCar :one
 SELECT * FROM cars WHERE id = $1;
 
+
+
+-- name: GetCarsByGarageId :many
+SELECT * FROM cars WHERE garage_id = $1;
+
+
 -- name: DeleteCar :exec
 DELETE FROM cars WHERE id = $1;

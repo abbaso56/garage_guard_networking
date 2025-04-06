@@ -2,6 +2,8 @@ services:
   server:
     ports:
       - 443:443
+      - 444:444
+      - 9001:9001
     build: 
       context: .
       dockerfile: server.Dockerfile

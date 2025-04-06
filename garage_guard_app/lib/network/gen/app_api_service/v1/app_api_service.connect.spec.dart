@@ -62,4 +62,52 @@ abstract final class AuthedAppApiService {
     app_api_servicev1app_api_service.GetGarageByGarageIdRequest.new,
     app_api_servicev1app_api_service.GetGarageByGarageIdResponse.new,
   );
+
+  /// Adds as new car to a garage
+  static const addNewCar = connect.Spec(
+    '/$name/AddNewCar',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.AddNewCarRequest.new,
+    app_api_servicev1app_api_service.AddNewCarResponse.new,
+  );
+
+  /// Update gesture sequence for garage
+  static const updateGestureSeq = connect.Spec(
+    '/$name/UpdateGestureSeq',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.UpdateGestureSeqRequest.new,
+    app_api_servicev1app_api_service.UpdateGestureSeqResponse.new,
+  );
+
+  /// Get cars registered to a garage
+  static const getCarsInGarage = connect.Spec(
+    '/$name/GetCarsInGarage',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.GetCarsInGarageRequest.new,
+    app_api_servicev1app_api_service.GetCarsInGarageResponse.new,
+  );
+
+  /// Get device id form garage
+  static const getGarageDevice = connect.Spec(
+    '/$name/GetGarageDevice',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.GetGarageDeviceRequest.new,
+    app_api_servicev1app_api_service.GetGarageDeviceResponse.new,
+  );
+
+  /// Adds device id
+  static const addDeviceId = connect.Spec(
+    '/$name/AddDeviceId',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.AddDeviceIdRequest.new,
+    app_api_servicev1app_api_service.AddDeviceIdResponse.new,
+  );
+
+  /// Add garage id
+  static const addGarageId = connect.Spec(
+    '/$name/AddGarageId',
+    connect.StreamType.unary,
+    app_api_servicev1app_api_service.AddGarageIdRequest.new,
+    app_api_servicev1app_api_service.AddGarageIdResponse.new,
+  );
 }

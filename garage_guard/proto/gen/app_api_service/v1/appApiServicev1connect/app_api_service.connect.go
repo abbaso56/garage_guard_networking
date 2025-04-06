@@ -52,6 +52,24 @@ const (
 	// AuthedAppApiServiceGetGarageByGarageIdProcedure is the fully-qualified name of the
 	// AuthedAppApiService's GetGarageByGarageId RPC.
 	AuthedAppApiServiceGetGarageByGarageIdProcedure = "/app_api_service.v1.AuthedAppApiService/GetGarageByGarageId"
+	// AuthedAppApiServiceAddNewCarProcedure is the fully-qualified name of the AuthedAppApiService's
+	// AddNewCar RPC.
+	AuthedAppApiServiceAddNewCarProcedure = "/app_api_service.v1.AuthedAppApiService/AddNewCar"
+	// AuthedAppApiServiceUpdateGestureSeqProcedure is the fully-qualified name of the
+	// AuthedAppApiService's UpdateGestureSeq RPC.
+	AuthedAppApiServiceUpdateGestureSeqProcedure = "/app_api_service.v1.AuthedAppApiService/UpdateGestureSeq"
+	// AuthedAppApiServiceGetCarsInGarageProcedure is the fully-qualified name of the
+	// AuthedAppApiService's GetCarsInGarage RPC.
+	AuthedAppApiServiceGetCarsInGarageProcedure = "/app_api_service.v1.AuthedAppApiService/GetCarsInGarage"
+	// AuthedAppApiServiceGetGarageDeviceProcedure is the fully-qualified name of the
+	// AuthedAppApiService's GetGarageDevice RPC.
+	AuthedAppApiServiceGetGarageDeviceProcedure = "/app_api_service.v1.AuthedAppApiService/GetGarageDevice"
+	// AuthedAppApiServiceAddDeviceIdProcedure is the fully-qualified name of the AuthedAppApiService's
+	// AddDeviceId RPC.
+	AuthedAppApiServiceAddDeviceIdProcedure = "/app_api_service.v1.AuthedAppApiService/AddDeviceId"
+	// AuthedAppApiServiceAddGarageIdProcedure is the fully-qualified name of the AuthedAppApiService's
+	// AddGarageId RPC.
+	AuthedAppApiServiceAddGarageIdProcedure = "/app_api_service.v1.AuthedAppApiService/AddGarageId"
 )
 
 // AppApiServiceClient is a client for the app_api_service.v1.AppApiService service.
@@ -191,6 +209,18 @@ type AuthedAppApiServiceClient interface {
 	GetGarages(context.Context, *connect.Request[v1.GetGaragesRequest]) (*connect.Response[v1.GetGaragesResponse], error)
 	// Gets a garage through its own id
 	GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error)
+	// Adds as new car to a garage
+	AddNewCar(context.Context, *connect.Request[v1.AddNewCarRequest]) (*connect.Response[v1.AddNewCarResponse], error)
+	// Update gesture sequence for garage
+	UpdateGestureSeq(context.Context, *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error)
+	// Get cars registered to a garage
+	GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error)
+	// Get device id form garage
+	GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error)
+	// Adds device id
+	AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error)
+	// Add garage id
+	AddGarageId(context.Context, *connect.Request[v1.AddGarageIdRequest]) (*connect.Response[v1.AddGarageIdResponse], error)
 }
 
 // NewAuthedAppApiServiceClient constructs a client for the app_api_service.v1.AuthedAppApiService
@@ -222,6 +252,42 @@ func NewAuthedAppApiServiceClient(httpClient connect.HTTPClient, baseURL string,
 			connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageByGarageId")),
 			connect.WithClientOptions(opts...),
 		),
+		addNewCar: connect.NewClient[v1.AddNewCarRequest, v1.AddNewCarResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceAddNewCarProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("AddNewCar")),
+			connect.WithClientOptions(opts...),
+		),
+		updateGestureSeq: connect.NewClient[v1.UpdateGestureSeqRequest, v1.UpdateGestureSeqResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceUpdateGestureSeqProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("UpdateGestureSeq")),
+			connect.WithClientOptions(opts...),
+		),
+		getCarsInGarage: connect.NewClient[v1.GetCarsInGarageRequest, v1.GetCarsInGarageResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceGetCarsInGarageProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("GetCarsInGarage")),
+			connect.WithClientOptions(opts...),
+		),
+		getGarageDevice: connect.NewClient[v1.GetGarageDeviceRequest, v1.GetGarageDeviceResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceGetGarageDeviceProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageDevice")),
+			connect.WithClientOptions(opts...),
+		),
+		addDeviceId: connect.NewClient[v1.AddDeviceIdRequest, v1.AddDeviceIdResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceAddDeviceIdProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("AddDeviceId")),
+			connect.WithClientOptions(opts...),
+		),
+		addGarageId: connect.NewClient[v1.AddGarageIdRequest, v1.AddGarageIdResponse](
+			httpClient,
+			baseURL+AuthedAppApiServiceAddGarageIdProcedure,
+			connect.WithSchema(authedAppApiServiceMethods.ByName("AddGarageId")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -230,6 +296,12 @@ type authedAppApiServiceClient struct {
 	newGarage           *connect.Client[v1.NewGarageRequest, v1.NewGarageResponse]
 	getGarages          *connect.Client[v1.GetGaragesRequest, v1.GetGaragesResponse]
 	getGarageByGarageId *connect.Client[v1.GetGarageByGarageIdRequest, v1.GetGarageByGarageIdResponse]
+	addNewCar           *connect.Client[v1.AddNewCarRequest, v1.AddNewCarResponse]
+	updateGestureSeq    *connect.Client[v1.UpdateGestureSeqRequest, v1.UpdateGestureSeqResponse]
+	getCarsInGarage     *connect.Client[v1.GetCarsInGarageRequest, v1.GetCarsInGarageResponse]
+	getGarageDevice     *connect.Client[v1.GetGarageDeviceRequest, v1.GetGarageDeviceResponse]
+	addDeviceId         *connect.Client[v1.AddDeviceIdRequest, v1.AddDeviceIdResponse]
+	addGarageId         *connect.Client[v1.AddGarageIdRequest, v1.AddGarageIdResponse]
 }
 
 // NewGarage calls app_api_service.v1.AuthedAppApiService.NewGarage.
@@ -247,6 +319,36 @@ func (c *authedAppApiServiceClient) GetGarageByGarageId(ctx context.Context, req
 	return c.getGarageByGarageId.CallUnary(ctx, req)
 }
 
+// AddNewCar calls app_api_service.v1.AuthedAppApiService.AddNewCar.
+func (c *authedAppApiServiceClient) AddNewCar(ctx context.Context, req *connect.Request[v1.AddNewCarRequest]) (*connect.Response[v1.AddNewCarResponse], error) {
+	return c.addNewCar.CallUnary(ctx, req)
+}
+
+// UpdateGestureSeq calls app_api_service.v1.AuthedAppApiService.UpdateGestureSeq.
+func (c *authedAppApiServiceClient) UpdateGestureSeq(ctx context.Context, req *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error) {
+	return c.updateGestureSeq.CallUnary(ctx, req)
+}
+
+// GetCarsInGarage calls app_api_service.v1.AuthedAppApiService.GetCarsInGarage.
+func (c *authedAppApiServiceClient) GetCarsInGarage(ctx context.Context, req *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error) {
+	return c.getCarsInGarage.CallUnary(ctx, req)
+}
+
+// GetGarageDevice calls app_api_service.v1.AuthedAppApiService.GetGarageDevice.
+func (c *authedAppApiServiceClient) GetGarageDevice(ctx context.Context, req *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error) {
+	return c.getGarageDevice.CallUnary(ctx, req)
+}
+
+// AddDeviceId calls app_api_service.v1.AuthedAppApiService.AddDeviceId.
+func (c *authedAppApiServiceClient) AddDeviceId(ctx context.Context, req *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error) {
+	return c.addDeviceId.CallUnary(ctx, req)
+}
+
+// AddGarageId calls app_api_service.v1.AuthedAppApiService.AddGarageId.
+func (c *authedAppApiServiceClient) AddGarageId(ctx context.Context, req *connect.Request[v1.AddGarageIdRequest]) (*connect.Response[v1.AddGarageIdResponse], error) {
+	return c.addGarageId.CallUnary(ctx, req)
+}
+
 // AuthedAppApiServiceHandler is an implementation of the app_api_service.v1.AuthedAppApiService
 // service.
 type AuthedAppApiServiceHandler interface {
@@ -257,6 +359,18 @@ type AuthedAppApiServiceHandler interface {
 	GetGarages(context.Context, *connect.Request[v1.GetGaragesRequest]) (*connect.Response[v1.GetGaragesResponse], error)
 	// Gets a garage through its own id
 	GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error)
+	// Adds as new car to a garage
+	AddNewCar(context.Context, *connect.Request[v1.AddNewCarRequest]) (*connect.Response[v1.AddNewCarResponse], error)
+	// Update gesture sequence for garage
+	UpdateGestureSeq(context.Context, *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error)
+	// Get cars registered to a garage
+	GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error)
+	// Get device id form garage
+	GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error)
+	// Adds device id
+	AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error)
+	// Add garage id
+	AddGarageId(context.Context, *connect.Request[v1.AddGarageIdRequest]) (*connect.Response[v1.AddGarageIdResponse], error)
 }
 
 // NewAuthedAppApiServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -284,6 +398,42 @@ func NewAuthedAppApiServiceHandler(svc AuthedAppApiServiceHandler, opts ...conne
 		connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageByGarageId")),
 		connect.WithHandlerOptions(opts...),
 	)
+	authedAppApiServiceAddNewCarHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceAddNewCarProcedure,
+		svc.AddNewCar,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("AddNewCar")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authedAppApiServiceUpdateGestureSeqHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceUpdateGestureSeqProcedure,
+		svc.UpdateGestureSeq,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("UpdateGestureSeq")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authedAppApiServiceGetCarsInGarageHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceGetCarsInGarageProcedure,
+		svc.GetCarsInGarage,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("GetCarsInGarage")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authedAppApiServiceGetGarageDeviceHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceGetGarageDeviceProcedure,
+		svc.GetGarageDevice,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageDevice")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authedAppApiServiceAddDeviceIdHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceAddDeviceIdProcedure,
+		svc.AddDeviceId,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("AddDeviceId")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authedAppApiServiceAddGarageIdHandler := connect.NewUnaryHandler(
+		AuthedAppApiServiceAddGarageIdProcedure,
+		svc.AddGarageId,
+		connect.WithSchema(authedAppApiServiceMethods.ByName("AddGarageId")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/app_api_service.v1.AuthedAppApiService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case AuthedAppApiServiceNewGarageProcedure:
@@ -292,6 +442,18 @@ func NewAuthedAppApiServiceHandler(svc AuthedAppApiServiceHandler, opts ...conne
 			authedAppApiServiceGetGaragesHandler.ServeHTTP(w, r)
 		case AuthedAppApiServiceGetGarageByGarageIdProcedure:
 			authedAppApiServiceGetGarageByGarageIdHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceAddNewCarProcedure:
+			authedAppApiServiceAddNewCarHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceUpdateGestureSeqProcedure:
+			authedAppApiServiceUpdateGestureSeqHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceGetCarsInGarageProcedure:
+			authedAppApiServiceGetCarsInGarageHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceGetGarageDeviceProcedure:
+			authedAppApiServiceGetGarageDeviceHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceAddDeviceIdProcedure:
+			authedAppApiServiceAddDeviceIdHandler.ServeHTTP(w, r)
+		case AuthedAppApiServiceAddGarageIdProcedure:
+			authedAppApiServiceAddGarageIdHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -311,4 +473,28 @@ func (UnimplementedAuthedAppApiServiceHandler) GetGarages(context.Context, *conn
 
 func (UnimplementedAuthedAppApiServiceHandler) GetGarageByGarageId(context.Context, *connect.Request[v1.GetGarageByGarageIdRequest]) (*connect.Response[v1.GetGarageByGarageIdResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.GetGarageByGarageId is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) AddNewCar(context.Context, *connect.Request[v1.AddNewCarRequest]) (*connect.Response[v1.AddNewCarResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.AddNewCar is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) UpdateGestureSeq(context.Context, *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.UpdateGestureSeq is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.GetCarsInGarage is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.GetGarageDevice is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.AddDeviceId is not implemented"))
+}
+
+func (UnimplementedAuthedAppApiServiceHandler) AddGarageId(context.Context, *connect.Request[v1.AddGarageIdRequest]) (*connect.Response[v1.AddGarageIdResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.AddGarageId is not implemented"))
 }

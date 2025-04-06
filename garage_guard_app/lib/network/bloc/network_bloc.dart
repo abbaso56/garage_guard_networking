@@ -27,7 +27,7 @@ final List<Interceptor> interceptList= [
 
 class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
   // var _bUrl = defUrl;
-  final HttpClient clientinfo ;
+  // final HttpClient clientinfo ;
   
   // var connected = "disconnected";
   // String get bUrl => _bUrl;
@@ -67,7 +67,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
 
 
-  NetworkBloc({required this.clientinfo}) : 
+  NetworkBloc({required this.networkRepo}) : 
     // networkRepo.appClient = AppApiServiceClient(protocol.Transport(
     // baseUrl: defUrl,
     // codec: const ProtoCodec(), 
@@ -76,8 +76,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     // interceptors: interceptList)),
 
 
-    //network repo where netework related storage is handled
-    networkRepo = NetworkRepository(clientinfo: clientinfo),
+    
   
     super(NetworkBaseState()){
 
@@ -128,7 +127,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       
 
       final resp = await req;
-      networkRepo.authenticated(resp.certificate);
+      networkRepo.authenticated(resp.certificate, resp.userId, resp.username);
 
 
 
@@ -148,10 +147,11 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       log("Signing in");
 
       final resp = await req;
-      networkRepo.authenticated(resp.certificate);
+      log("awaits correctly");
+      networkRepo.authenticated(resp.certificate, resp.userId, resp.username);
       log("Signed in");
 
-      
+
       emit(NetworkSignInResponseState());
       emit(NetworkLoggedInState());
     },);
@@ -160,7 +160,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
     // Get garages registerd to the account
     on<NetworkGetGarages>((event, emit) async{
-      final req = networkRepo.authedAppClient!.getGarages(GetGaragesRequest());
+      final req = networkRepo.authedAppClient!.getGarages(GetGaragesRequest(userId: networkRepo.userId));
       emit(NetworkGetGaragesRequestState());
       log("Getting Garages for user");
 
@@ -177,7 +177,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
     // The user is the admin since they added the garage
 
     on<NetworkNewGarage>((event, emit) async{
-      final req = networkRepo.authedAppClient!.newGarage(NewGarageRequest(garageName: event.garageName));
+      final req = networkRepo.authedAppClient!.newGarage(NewGarageRequest(garageName: event.garageName, userId: networkRepo.userId));
       emit(NetworkNewGarageRequestState());
 
       await req;

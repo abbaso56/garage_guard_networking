@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garage_guard_app/network/bloc/network_bloc.dart';
+import 'package:garage_guard_app/network/repo/network_repository.dart';
 import 'package:garage_guard_app/pages/components/decorated_text_field.dart';
 import 'package:garage_guard_app/pages/components/styled_scaffold.dart';
 import 'package:garage_guard_app/pages/ip/ip_components/connection_status.dart';
@@ -40,7 +41,7 @@ class _IpResolutionPageState extends State<IpResolutionPage> {
             BlocBuilder<NetworkBloc, NetworkState>(
               buildWhen: (previous, current) => current is NetworkNewIpState,
               builder: (context, state) {
-                return Text(context.read<NetworkBloc>().bUrl);
+                return Text(context.read<NetworkRepository>().bUrl);
               },
             ),
             

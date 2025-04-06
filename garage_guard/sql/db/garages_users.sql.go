@@ -76,3 +76,25 @@ func (q *Queries) GetGarageNamesByuserId(ctx context.Context, userID pgtype.UUID
 	}
 	return items, nil
 }
+
+const getGarageUserRelationByIDS = `-- name: GetGarageUserRelationByIDS :one
+SeLECT garage_id, user_id, is_admin, created_at, updated_at FROM garages_users WHERE garage_id = $1 AND user_id=$2
+`
+
+type GetGarageUserRelationByIDSParams struct {
+	GarageID pgtype.UUID
+	UserID   pgtype.UUID
+}
+
+func (q *Queries) GetGarageUserRelationByIDS(ctx context.Context, arg GetGarageUserRelationByIDSParams) (GaragesUser, error) {
+	row := q.db.QueryRow(ctx, getGarageUserRelationByIDS, arg.GarageID, arg.UserID)
+	var i GaragesUser
+	err := row.Scan(
+		&i.GarageID,
+		&i.UserID,
+		&i.IsAdmin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}

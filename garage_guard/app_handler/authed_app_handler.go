@@ -159,3 +159,26 @@ func (appSrv *AuthedAppHandler) GetGarageByGarageID(ctx context.Context, req *co
 	return resp, nil
 
 }
+
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}
+
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}
+
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}
+
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}
+
+func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+
+}

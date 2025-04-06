@@ -69,3 +69,33 @@ func (q *Queries) GetCar(ctx context.Context, id pgtype.UUID) (Car, error) {
 	)
 	return i, err
 }
+
+const getCarsByGarageId = `-- name: GetCarsByGarageId :many
+SELECT id, garage_id, license_plate, created_at, updated_at FROM cars WHERE garage_id = $1
+`
+
+func (q *Queries) GetCarsByGarageId(ctx context.Context, garageID pgtype.UUID) ([]Car, error) {
+	rows, err := q.db.Query(ctx, getCarsByGarageId, garageID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Car
+	for rows.Next() {
+		var i Car
+		if err := rows.Scan(
+			&i.ID,
+			&i.GarageID,
+			&i.LicensePlate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

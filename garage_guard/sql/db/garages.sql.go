@@ -59,6 +59,25 @@ func (q *Queries) DeleteGarage(ctx context.Context, id pgtype.UUID) error {
 	return err
 }
 
+const getGarageByDeviceId = `-- name: GetGarageByDeviceId :one
+SELECT id, garage_name, device_id, gesture_seq, created_at, updated_at, video_url FROM garages WHERE device_id = $1
+`
+
+func (q *Queries) GetGarageByDeviceId(ctx context.Context, deviceID pgtype.UUID) (Garage, error) {
+	row := q.db.QueryRow(ctx, getGarageByDeviceId, deviceID)
+	var i Garage
+	err := row.Scan(
+		&i.ID,
+		&i.GarageName,
+		&i.DeviceID,
+		&i.GestureSeq,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.VideoUrl,
+	)
+	return i, err
+}
+
 const getGarageById = `-- name: GetGarageById :one
 SELECT id, garage_name, device_id, gesture_seq, created_at, updated_at, video_url FROM garages WHERE id = $1
 `

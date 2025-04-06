@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garage_guard_app/network/bloc/network_bloc.dart';
+import 'package:garage_guard_app/network/repo/network_repository.dart';
 
 
 class ConnectionStatus extends StatefulWidget {
@@ -18,7 +19,7 @@ class _ConnectionStatusState extends State<ConnectionStatus> {
   Widget build(BuildContext context) {
     return BlocSelector<NetworkBloc,NetworkState,String>(
     selector:(state){
-      return context.read<NetworkBloc>().connected;
+      return context.read<NetworkRepository>().connected;
     } , 
     builder: (context, text){
       return Text(text);

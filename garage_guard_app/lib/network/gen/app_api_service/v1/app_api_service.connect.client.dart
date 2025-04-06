@@ -117,4 +117,112 @@ extension type AuthedAppApiServiceClient (connect.Transport _transport) {
       onTrailer: onTrailer,
     );
   }
+
+  /// Adds as new car to a garage
+  Future<app_api_servicev1app_api_service.AddNewCarResponse> addNewCar(
+    app_api_servicev1app_api_service.AddNewCarRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.addNewCar,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  /// Update gesture sequence for garage
+  Future<app_api_servicev1app_api_service.UpdateGestureSeqResponse> updateGestureSeq(
+    app_api_servicev1app_api_service.UpdateGestureSeqRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.updateGestureSeq,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  /// Get cars registered to a garage
+  Future<app_api_servicev1app_api_service.GetCarsInGarageResponse> getCarsInGarage(
+    app_api_servicev1app_api_service.GetCarsInGarageRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.getCarsInGarage,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  /// Get device id form garage
+  Future<app_api_servicev1app_api_service.GetGarageDeviceResponse> getGarageDevice(
+    app_api_servicev1app_api_service.GetGarageDeviceRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.getGarageDevice,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  /// Adds device id
+  Future<app_api_servicev1app_api_service.AddDeviceIdResponse> addDeviceId(
+    app_api_servicev1app_api_service.AddDeviceIdRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.addDeviceId,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  /// Add garage id
+  Future<app_api_servicev1app_api_service.AddGarageIdResponse> addGarageId(
+    app_api_servicev1app_api_service.AddGarageIdRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthedAppApiService.addGarageId,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
 }

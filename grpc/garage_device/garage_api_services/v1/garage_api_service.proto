@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+
+package garage_api_services.v1;
+
+option go_package = "garage_guard/proto/gen/garage_api_services/v1;garageApiServicesv1";
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+
+// Service that checks if the entry info matches
+service GarageEntryCheckService{
+    rpc LicensePlateCheck(LicensePlateCheckRequest) returns (LicensePlateCheckResponse){}
+    rpc GestureSeqCheck (GestureSeqCheckRequest) returns (GestureSeqCheckResponse){}
+    rpc UserIdCheck (UserIdCheckRequest) returns (UserIdCheckResponse){}
+
+}
+///-----------------------------------------
+// LicensePlateCheck
+message LicensePlateCheckRequest{
+    string garage_id = 1;
+    string device_id = 2;
+}
+
+message LicensePlateCheckResponse{
+    repeated string license_plate_string = 1;
+}
+//--------------------------------------------
+// GestureSeqCheck
+message GestureSeqCheckRequest{
+    string garage_id = 1;
+    string device_id = 2;
+    string gesture_seq = 3;
+}
+
+message GestureSeqCheckResponse{
+    bool correct = 1;
+}
+//--------------------------------------------
+// UserIdCheck
+message UserIdCheckRequest{
+    string garage_id = 1;
+    string device_id = 2;
+    string user_id = 3;
+}
+
+message UserIdCheckResponse{
+    bool correct = 1;
+}
+
+// IGNORE THE REST FOR NOW(now might not come)
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+/*
+// Register device with the server
+// I don't think this really counts as oauth  cause a it would send the public key at the same it asks for auth
+service DeviceRegistrationService{
+    rpc OAuthRegistration (OAuthRegistrationRequest) returns (OAuthRegistrationResponse){}
+}
+
+//----------------------------------------
+// OAuthRegistration
+
+message OAuthRegistrationRequest{
+    string user_id = 1;
+    string public_key =2;
+}
+
+message OAuthRegistrationResponse{
+    bool success = 1;
+    string certificate = 2;
+}
+
+
+
+
+//----------------------------------------
+//----------------------------------------
+// Just dw about this
+service VideoStreamingService{
+    rpc CameraStream (stream CameraStreamRequest) returns (CameraStreamResponse)
+}
+*/

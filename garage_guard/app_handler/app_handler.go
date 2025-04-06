@@ -64,7 +64,7 @@ func (appSrv *AppHandler) RegisterUser(ctx context.Context, req *connect.Request
 
 	// Sends  respon
 	resp := connect.NewResponse(&appApiServicev1.RegisterUserResponse{
-		UserId:      string(id[:]),
+		UserId:      id.String(),
 		Username:    req.Msg.Username,
 		Certificate: cert,
 	})
@@ -78,7 +78,7 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 
 	// Responds with error if something went worng when trying to fetch the user
 	if err != nil {
-		return nil, connect.NewError(connect.CodeUnknown, err)
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
 	// Compares password entered with the hash and responds with an error if somehting goes wrong(eg. they don't match)
@@ -94,13 +94,12 @@ func (appSrv *AppHandler) SignIn(ctx context.Context, req *connect.Request[appAp
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	//responds with JWT
-
 	resp := connect.NewResponse(&appApiServicev1.SignInResponse{
-		UserId:      string(userEntry.ID.Bytes[:]),
+		UserId:      uuid.UUID(userEntry.ID.Bytes).String(),
 		Username:    userEntry.Username,
 		Certificate: cert,
 	})
+	log.Printf("User %s signed in successfully", userEntry.Username)
 
 	return resp, nil
 

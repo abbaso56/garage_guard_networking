@@ -10,3 +10,7 @@ FROM garages
 INNER JOIN garages_users ON garages.id = garages_users.garage_id
 WHERE garages_users.user_id = $1
 ORDER BY garages.garage_name;
+
+-- name: GetGarageUserRelationByIDS :one
+SeLECT * FROM garages_users WHERE garage_id = $1 AND user_id=$2;
+

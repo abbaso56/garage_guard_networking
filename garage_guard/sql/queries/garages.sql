@@ -21,5 +21,9 @@ WHERE id = $1
 RETURNING *;
 
 
+-- name: GetGarageByDeviceId :one
+SELECT * FROM garages WHERE device_id = $1;
+
+
 -- name: DeleteGarage :exec
 DELETE FROM garages WHERE id = $1;
