@@ -1,0 +1,22 @@
+[ req ]
+default_bits       = 2048
+prompt             = no
+default_md         = sha256
+distinguished_name = dn
+req_extensions     = req_ext
+
+[ dn ]
+C  = CA
+ST = Ontario
+L  = Toronto
+O  = Garage Guard
+OU = Garage Guard server
+CN = ec2-35-182-96-250.ca-central-1.compute.amazonaws.com
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = ec2-35-182-96-250.ca-central-1.compute.amazonaws.com
+IP.1  = 35.182.96.250
+

@@ -52,9 +52,7 @@ service AuthedAppApiService{
     // Get cars registered to a garage
     rpc GetCarsInGarage(GetCarsInGarageRequest) returns (GetCarsInGarageResponse){}
     
-    // Get device id form garage
-    rpc GetGarageDevice(GetGarageDeviceRequest) returns (GetGarageDeviceResponse){}
-
+   
     // Adds device id 
     rpc AddDeviceId(AddDeviceIdRequest) returns (AddDeviceIdResponse){}
 
@@ -213,7 +211,8 @@ message AddNewCarResponse{
 // numbers representing different gestures sent as a string separated by commas
 // 1,2,3,5,6,8
 message UpdateGestureSeqRequest{
-    string gesture_seq = 1;
+    string garage_id = 1;
+    string gesture_seq = 2;
 }
 
 message UpdateGestureSeqResponse{
@@ -232,16 +231,7 @@ message GetCarsInGarageResponse{
     repeated string license_plate = 1;
 }
 
-//-------------------------------------
-//GetGarageDevice
 
-message GetGarageDeviceRequest{
-    string garage_id = 1;
-}
-
-message GetGarageDeviceResponse{
-    string device_id = 1;
-}
 
 //-------------------------------------
 // AddDeviceId
@@ -261,6 +251,7 @@ message AddDeviceIdResponse{
 message AddGarageIdRequest{
     string user_id = 1;
     string garage_id = 2;
+    string garage_name = 3;
 }
 
 message AddGarageIdResponse{

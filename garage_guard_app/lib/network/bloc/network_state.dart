@@ -39,11 +39,8 @@ final class NetworkRegisterUserResponseState extends NetworkState{}
 // getGarages states
 final class NetworkGetGaragesRequestState extends NetworkState{}
 
-final class NetworkGetGaragesResponseState extends NetworkState{
-  final List<Garage> garages;
+final class NetworkGetGaragesResponseState extends NetworkState{}
 
-  const NetworkGetGaragesResponseState({required this.garages});
-}
 
 
 
@@ -61,5 +58,16 @@ final class NetworkGetGarageByGarageIdResponseState extends NetworkState{
   const NetworkGetGarageByGarageIdResponseState({required this.garageInfo});
 }
 
+
+// getCarsInGarage states
+final class NetworkGetCarsInGarageRequestState extends NetworkState{}
+final class NetworkGetCarsInGarageResponseState extends NetworkState{
+}
+
+
+// addCar states
+final class NetworkAddCarRequestState extends NetworkState{}
+
+final class NetworkAddCarResponseState extends NetworkState{}
 
 

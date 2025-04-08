@@ -1,0 +1,25 @@
+{
+    "family": "garage-guard-server",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+      {
+        "name": "garage-guard-server",
+        "image": "526811500935.dkr.ecr.ca-central-1.amazonaws.com/garage-guard-server:latest",
+        "memory": 8192,
+        "cpu": 2048,
+        "essential": true,
+        "portMappings": [
+          { "containerPort": 443, "hostPort": 443 },
+          { "containerPort": 444, "hostPort": 444 },
+          { "containerPort": 9001, "hostPort": 9001 }
+        ],
+        "environment": [
+          { "name": "PG_URL", "value": "postgresql://root:pass%3E%29lkPass%24%25@database-1.cluster-c70c2oyg0r3c.ca-central-1.rds.amazonaws.com:5432/postgres" }
+        ]
+      }
+    ],
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "2048",
+    "memory": "8192",
+    "executionRoleArn": "arn:aws:iam::526811500935:role/ecsTaskExecutionRole"
+}

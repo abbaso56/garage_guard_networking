@@ -7,21 +7,30 @@ import 'package:connectrpc/connect.dart';
 import 'package:connectrpc/http2.dart';
 import 'package:connectrpc/protocol/grpc.dart' as protocol;
 import 'package:connectrpc/protobuf.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.connect.client.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.pb.dart';
 
 
 
 class NetworkRepository {
-  static const defUrl = "https://172.23.240.1";
+  static const defUrl = "https://ec2-35-182-96-250.ca-central-1.compute.amazonaws.com";
   String bUrl = "$defUrl:443"; 
   String connected = "disconnected";
-
   final HttpClient clientinfo;
   AppApiServiceClient appClient;
-
   
+
+  // Home page stuff
+  bool homePageSync = false;
+  bool homeChangeBool = false;
+  List<Garage>garages = [];
+  // Garage page Stuff
+  bool garageCalled = false;
+
+  List<String> cars = [];
 
   // Url for Authenticated client
   String authUrl = "$defUrl:444";
@@ -95,7 +104,7 @@ class NetworkRepository {
     final ctx = SecurityContext.defaultContext;
    
     final  ca = await rootBundle.load('assets/rootCA.crt');
-    final  srv = await rootBundle.load('assets/srv.crt');
+    final  srv = await rootBundle.load('assets/srv_out.crt');
     ctx.setTrustedCertificatesBytes(ca.buffer.asUint8List());
     ctx.useCertificateChainBytes(srv.buffer.asUint8List());
     log("Loaded rootCA and server cert");
@@ -127,6 +136,15 @@ class NetworkRepository {
 
   }
 
+  void homePageChange(List<Garage> gNew){
+    if (!listEquals(garages, gNew)){
+      garages = gNew;
+      homeChangeBool = true;
+    }
+    
+  }
+
+  
 
 
 

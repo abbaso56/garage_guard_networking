@@ -73,6 +73,7 @@ flutter:
     - assets/rootCA.crt
     - assets/srv.crt
     - assets/garage_guard_logo.png
+    - assets/srv_out.crt
 
 
 

@@ -226,14 +226,15 @@ final $typed_data.Uint8List addNewCarResponseDescriptor = $convert.base64Decode(
 const UpdateGestureSeqRequest$json = {
   '1': 'UpdateGestureSeqRequest',
   '2': [
-    {'1': 'gesture_seq', '3': 1, '4': 1, '5': 9, '10': 'gestureSeq'},
+    {'1': 'garage_id', '3': 1, '4': 1, '5': 9, '10': 'garageId'},
+    {'1': 'gesture_seq', '3': 2, '4': 1, '5': 9, '10': 'gestureSeq'},
   ],
 };
 
 /// Descriptor for `UpdateGestureSeqRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateGestureSeqRequestDescriptor = $convert.base64Decode(
-    'ChdVcGRhdGVHZXN0dXJlU2VxUmVxdWVzdBIfCgtnZXN0dXJlX3NlcRgBIAEoCVIKZ2VzdHVyZV'
-    'NlcQ==');
+    'ChdVcGRhdGVHZXN0dXJlU2VxUmVxdWVzdBIbCglnYXJhZ2VfaWQYASABKAlSCGdhcmFnZUlkEh'
+    '8KC2dlc3R1cmVfc2VxGAIgASgJUgpnZXN0dXJlU2Vx');
 
 @$core.Deprecated('Use updateGestureSeqResponseDescriptor instead')
 const UpdateGestureSeqResponse$json = {
@@ -272,30 +273,6 @@ final $typed_data.Uint8List getCarsInGarageResponseDescriptor = $convert.base64D
     'ChdHZXRDYXJzSW5HYXJhZ2VSZXNwb25zZRIjCg1saWNlbnNlX3BsYXRlGAEgAygJUgxsaWNlbn'
     'NlUGxhdGU=');
 
-@$core.Deprecated('Use getGarageDeviceRequestDescriptor instead')
-const GetGarageDeviceRequest$json = {
-  '1': 'GetGarageDeviceRequest',
-  '2': [
-    {'1': 'garage_id', '3': 1, '4': 1, '5': 9, '10': 'garageId'},
-  ],
-};
-
-/// Descriptor for `GetGarageDeviceRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getGarageDeviceRequestDescriptor = $convert.base64Decode(
-    'ChZHZXRHYXJhZ2VEZXZpY2VSZXF1ZXN0EhsKCWdhcmFnZV9pZBgBIAEoCVIIZ2FyYWdlSWQ=');
-
-@$core.Deprecated('Use getGarageDeviceResponseDescriptor instead')
-const GetGarageDeviceResponse$json = {
-  '1': 'GetGarageDeviceResponse',
-  '2': [
-    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
-  ],
-};
-
-/// Descriptor for `GetGarageDeviceResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getGarageDeviceResponseDescriptor = $convert.base64Decode(
-    'ChdHZXRHYXJhZ2VEZXZpY2VSZXNwb25zZRIbCglkZXZpY2VfaWQYASABKAlSCGRldmljZUlk');
-
 @$core.Deprecated('Use addDeviceIdRequestDescriptor instead')
 const AddDeviceIdRequest$json = {
   '1': 'AddDeviceIdRequest',
@@ -328,13 +305,14 @@ const AddGarageIdRequest$json = {
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'garage_id', '3': 2, '4': 1, '5': 9, '10': 'garageId'},
+    {'1': 'garage_name', '3': 3, '4': 1, '5': 9, '10': 'garageName'},
   ],
 };
 
 /// Descriptor for `AddGarageIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List addGarageIdRequestDescriptor = $convert.base64Decode(
     'ChJBZGRHYXJhZ2VJZFJlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhsKCWdhcmFnZV'
-    '9pZBgCIAEoCVIIZ2FyYWdlSWQ=');
+    '9pZBgCIAEoCVIIZ2FyYWdlSWQSHwoLZ2FyYWdlX25hbWUYAyABKAlSCmdhcmFnZU5hbWU=');
 
 @$core.Deprecated('Use addGarageIdResponseDescriptor instead')
 const AddGarageIdResponse$json = {
@@ -385,7 +363,6 @@ const $core.Map<$core.String, $core.dynamic> AuthedAppApiServiceBase$json = {
     {'1': 'AddNewCar', '2': '.app_api_service.v1.AddNewCarRequest', '3': '.app_api_service.v1.AddNewCarResponse', '4': {}},
     {'1': 'UpdateGestureSeq', '2': '.app_api_service.v1.UpdateGestureSeqRequest', '3': '.app_api_service.v1.UpdateGestureSeqResponse', '4': {}},
     {'1': 'GetCarsInGarage', '2': '.app_api_service.v1.GetCarsInGarageRequest', '3': '.app_api_service.v1.GetCarsInGarageResponse', '4': {}},
-    {'1': 'GetGarageDevice', '2': '.app_api_service.v1.GetGarageDeviceRequest', '3': '.app_api_service.v1.GetGarageDeviceResponse', '4': {}},
     {'1': 'AddDeviceId', '2': '.app_api_service.v1.AddDeviceIdRequest', '3': '.app_api_service.v1.AddDeviceIdResponse', '4': {}},
     {'1': 'AddGarageId', '2': '.app_api_service.v1.AddGarageIdRequest', '3': '.app_api_service.v1.AddGarageIdResponse', '4': {}},
   ],
@@ -407,8 +384,6 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> AuthedAppA
   '.app_api_service.v1.UpdateGestureSeqResponse': UpdateGestureSeqResponse$json,
   '.app_api_service.v1.GetCarsInGarageRequest': GetCarsInGarageRequest$json,
   '.app_api_service.v1.GetCarsInGarageResponse': GetCarsInGarageResponse$json,
-  '.app_api_service.v1.GetGarageDeviceRequest': GetGarageDeviceRequest$json,
-  '.app_api_service.v1.GetGarageDeviceResponse': GetGarageDeviceResponse$json,
   '.app_api_service.v1.AddDeviceIdRequest': AddDeviceIdRequest$json,
   '.app_api_service.v1.AddDeviceIdResponse': AddDeviceIdResponse$json,
   '.app_api_service.v1.AddGarageIdRequest': AddGarageIdRequest$json,
@@ -428,11 +403,9 @@ final $typed_data.Uint8List authedAppApiServiceDescriptor = $convert.base64Decod
     'LmFwcF9hcGlfc2VydmljZS52MS5VcGRhdGVHZXN0dXJlU2VxUmVxdWVzdBosLmFwcF9hcGlfc2'
     'VydmljZS52MS5VcGRhdGVHZXN0dXJlU2VxUmVzcG9uc2UiABJsCg9HZXRDYXJzSW5HYXJhZ2US'
     'Ki5hcHBfYXBpX3NlcnZpY2UudjEuR2V0Q2Fyc0luR2FyYWdlUmVxdWVzdBorLmFwcF9hcGlfc2'
-    'VydmljZS52MS5HZXRDYXJzSW5HYXJhZ2VSZXNwb25zZSIAEmwKD0dldEdhcmFnZURldmljZRIq'
-    'LmFwcF9hcGlfc2VydmljZS52MS5HZXRHYXJhZ2VEZXZpY2VSZXF1ZXN0GisuYXBwX2FwaV9zZX'
-    'J2aWNlLnYxLkdldEdhcmFnZURldmljZVJlc3BvbnNlIgASYAoLQWRkRGV2aWNlSWQSJi5hcHBf'
-    'YXBpX3NlcnZpY2UudjEuQWRkRGV2aWNlSWRSZXF1ZXN0GicuYXBwX2FwaV9zZXJ2aWNlLnYxLk'
-    'FkZERldmljZUlkUmVzcG9uc2UiABJgCgtBZGRHYXJhZ2VJZBImLmFwcF9hcGlfc2VydmljZS52'
-    'MS5BZGRHYXJhZ2VJZFJlcXVlc3QaJy5hcHBfYXBpX3NlcnZpY2UudjEuQWRkR2FyYWdlSWRSZX'
-    'Nwb25zZSIA');
+    'VydmljZS52MS5HZXRDYXJzSW5HYXJhZ2VSZXNwb25zZSIAEmAKC0FkZERldmljZUlkEiYuYXBw'
+    'X2FwaV9zZXJ2aWNlLnYxLkFkZERldmljZUlkUmVxdWVzdBonLmFwcF9hcGlfc2VydmljZS52MS'
+    '5BZGREZXZpY2VJZFJlc3BvbnNlIgASYAoLQWRkR2FyYWdlSWQSJi5hcHBfYXBpX3NlcnZpY2Uu'
+    'djEuQWRkR2FyYWdlSWRSZXF1ZXN0GicuYXBwX2FwaV9zZXJ2aWNlLnYxLkFkZEdhcmFnZUlkUm'
+    'VzcG9uc2UiAA==');
 

@@ -6,6 +6,7 @@ import 'package:garage_guard_app/network/repo/network_repository.dart';
 import 'package:garage_guard_app/network/secure_client.dart';
 import 'package:garage_guard_app/pages/logged_in/add_device/add_device_page.dart';
 import 'package:garage_guard_app/pages/logged_in/add_garage/add_garage_page.dart';
+import 'package:garage_guard_app/pages/logged_in/garage_page/garage_page.dart';
 import 'package:garage_guard_app/pages/logged_in/home/home_page.dart';
 import 'package:garage_guard_app/pages/ip/ip_resolution_page.dart';
 import 'package:garage_guard_app/pages/sign_in/sign_in_page.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
             // Signed in routes
             "/home_page": (context) => HomePage(),
             "/add_garage": (context) => AddGaragePage(),
+            
             "/add_device": (context) => AddDevicePage(),
           },
         ),

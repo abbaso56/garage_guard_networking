@@ -25,7 +25,7 @@ func main() {
 
 	//connects to database
 
-	dbConn, err := pgx.Connect(context.Background(), os.Getenv("PG_URL"))
+	dbConn, err := pgx.Connect(context.Background(), "postgresql://root:pass%3E%29lkPass%24%25@database-1-instance-1.c70c2oyg0r3c.ca-central-1.rds.amazonaws.com:5432/postgres")
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 
@@ -43,7 +43,7 @@ func main() {
 	))
 
 	//get certificate
-	crtPem, err := os.ReadFile("usr/server_tls/srv.crt")
+	crtPem, err := os.ReadFile("usr/server_tls/srv_out.crt")
 	if err != nil {
 		log.Fatal("failed to read cert")
 	}
@@ -85,7 +85,7 @@ func main() {
 		Handler: muxAuth,
 		TLSConfig: &tls.Config{
 			ClientCAs:    caCertPool,
-			ClientAuth:   tls.RequireAndVerifyClientCert,
+			ClientAuth:   tls.RequireAnyClientCert,
 			MinVersion:   tls.VersionTLS13,
 			Certificates: []tls.Certificate{cK},
 		},

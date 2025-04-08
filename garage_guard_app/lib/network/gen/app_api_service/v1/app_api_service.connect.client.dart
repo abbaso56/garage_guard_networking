@@ -172,24 +172,6 @@ extension type AuthedAppApiServiceClient (connect.Transport _transport) {
     );
   }
 
-  /// Get device id form garage
-  Future<app_api_servicev1app_api_service.GetGarageDeviceResponse> getGarageDevice(
-    app_api_servicev1app_api_service.GetGarageDeviceRequest input, {
-    connect.Headers? headers,
-    connect.AbortSignal? signal,
-    Function(connect.Headers)? onHeader,
-    Function(connect.Headers)? onTrailer,
-  }) {
-    return connect.Client(_transport).unary(
-      specs.AuthedAppApiService.getGarageDevice,
-      input,
-      signal: signal,
-      headers: headers,
-      onHeader: onHeader,
-      onTrailer: onTrailer,
-    );
-  }
-
   /// Adds device id
   Future<app_api_servicev1app_api_service.AddDeviceIdResponse> addDeviceId(
     app_api_servicev1app_api_service.AddDeviceIdRequest input, {

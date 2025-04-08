@@ -87,14 +87,6 @@ abstract final class AuthedAppApiService {
     app_api_servicev1app_api_service.GetCarsInGarageResponse.new,
   );
 
-  /// Get device id form garage
-  static const getGarageDevice = connect.Spec(
-    '/$name/GetGarageDevice',
-    connect.StreamType.unary,
-    app_api_servicev1app_api_service.GetGarageDeviceRequest.new,
-    app_api_servicev1app_api_service.GetGarageDeviceResponse.new,
-  );
-
   /// Adds device id
   static const addDeviceId = connect.Spec(
     '/$name/AddDeviceId',

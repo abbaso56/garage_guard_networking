@@ -976,9 +976,13 @@ class AddNewCarResponse extends $pb.GeneratedMessage {
 /// 1,2,3,5,6,8
 class UpdateGestureSeqRequest extends $pb.GeneratedMessage {
   factory UpdateGestureSeqRequest({
+    $core.String? garageId,
     $core.String? gestureSeq,
   }) {
     final $result = create();
+    if (garageId != null) {
+      $result.garageId = garageId;
+    }
     if (gestureSeq != null) {
       $result.gestureSeq = gestureSeq;
     }
@@ -989,7 +993,8 @@ class UpdateGestureSeqRequest extends $pb.GeneratedMessage {
   factory UpdateGestureSeqRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateGestureSeqRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'gestureSeq')
+    ..aOS(1, _omitFieldNames ? '' : 'garageId')
+    ..aOS(2, _omitFieldNames ? '' : 'gestureSeq')
     ..hasRequiredFields = false
   ;
 
@@ -1015,13 +1020,22 @@ class UpdateGestureSeqRequest extends $pb.GeneratedMessage {
   static UpdateGestureSeqRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get gestureSeq => $_getSZ(0);
+  $core.String get garageId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set gestureSeq($core.String v) { $_setString(0, v); }
+  set garageId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasGestureSeq() => $_has(0);
+  $core.bool hasGarageId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearGestureSeq() => clearField(1);
+  void clearGarageId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get gestureSeq => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set gestureSeq($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasGestureSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGestureSeq() => clearField(2);
 }
 
 class UpdateGestureSeqResponse extends $pb.GeneratedMessage {
@@ -1168,106 +1182,6 @@ class GetCarsInGarageResponse extends $pb.GeneratedMessage {
   $core.List<$core.String> get licensePlate => $_getList(0);
 }
 
-class GetGarageDeviceRequest extends $pb.GeneratedMessage {
-  factory GetGarageDeviceRequest({
-    $core.String? garageId,
-  }) {
-    final $result = create();
-    if (garageId != null) {
-      $result.garageId = garageId;
-    }
-    return $result;
-  }
-  GetGarageDeviceRequest._() : super();
-  factory GetGarageDeviceRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetGarageDeviceRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGarageDeviceRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'garageId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetGarageDeviceRequest clone() => GetGarageDeviceRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetGarageDeviceRequest copyWith(void Function(GetGarageDeviceRequest) updates) => super.copyWith((message) => updates(message as GetGarageDeviceRequest)) as GetGarageDeviceRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetGarageDeviceRequest create() => GetGarageDeviceRequest._();
-  GetGarageDeviceRequest createEmptyInstance() => create();
-  static $pb.PbList<GetGarageDeviceRequest> createRepeated() => $pb.PbList<GetGarageDeviceRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetGarageDeviceRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGarageDeviceRequest>(create);
-  static GetGarageDeviceRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get garageId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set garageId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasGarageId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearGarageId() => clearField(1);
-}
-
-class GetGarageDeviceResponse extends $pb.GeneratedMessage {
-  factory GetGarageDeviceResponse({
-    $core.String? deviceId,
-  }) {
-    final $result = create();
-    if (deviceId != null) {
-      $result.deviceId = deviceId;
-    }
-    return $result;
-  }
-  GetGarageDeviceResponse._() : super();
-  factory GetGarageDeviceResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetGarageDeviceResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGarageDeviceResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'deviceId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetGarageDeviceResponse clone() => GetGarageDeviceResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetGarageDeviceResponse copyWith(void Function(GetGarageDeviceResponse) updates) => super.copyWith((message) => updates(message as GetGarageDeviceResponse)) as GetGarageDeviceResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetGarageDeviceResponse create() => GetGarageDeviceResponse._();
-  GetGarageDeviceResponse createEmptyInstance() => create();
-  static $pb.PbList<GetGarageDeviceResponse> createRepeated() => $pb.PbList<GetGarageDeviceResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetGarageDeviceResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGarageDeviceResponse>(create);
-  static GetGarageDeviceResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get deviceId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set deviceId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasDeviceId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearDeviceId() => clearField(1);
-}
-
 class AddDeviceIdRequest extends $pb.GeneratedMessage {
   factory AddDeviceIdRequest({
     $core.String? garageId,
@@ -1386,6 +1300,7 @@ class AddGarageIdRequest extends $pb.GeneratedMessage {
   factory AddGarageIdRequest({
     $core.String? userId,
     $core.String? garageId,
+    $core.String? garageName,
   }) {
     final $result = create();
     if (userId != null) {
@@ -1393,6 +1308,9 @@ class AddGarageIdRequest extends $pb.GeneratedMessage {
     }
     if (garageId != null) {
       $result.garageId = garageId;
+    }
+    if (garageName != null) {
+      $result.garageName = garageName;
     }
     return $result;
   }
@@ -1403,6 +1321,7 @@ class AddGarageIdRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AddGarageIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'app_api_service.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'garageId')
+    ..aOS(3, _omitFieldNames ? '' : 'garageName')
     ..hasRequiredFields = false
   ;
 
@@ -1444,6 +1363,15 @@ class AddGarageIdRequest extends $pb.GeneratedMessage {
   $core.bool hasGarageId() => $_has(1);
   @$pb.TagNumber(2)
   void clearGarageId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get garageName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set garageName($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasGarageName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGarageName() => clearField(3);
 }
 
 class AddGarageIdResponse extends $pb.GeneratedMessage {
@@ -1532,9 +1460,6 @@ class AuthedAppApiServiceApi {
   ;
   $async.Future<GetCarsInGarageResponse> getCarsInGarage($pb.ClientContext? ctx, GetCarsInGarageRequest request) =>
     _client.invoke<GetCarsInGarageResponse>(ctx, 'AuthedAppApiService', 'GetCarsInGarage', request, GetCarsInGarageResponse())
-  ;
-  $async.Future<GetGarageDeviceResponse> getGarageDevice($pb.ClientContext? ctx, GetGarageDeviceRequest request) =>
-    _client.invoke<GetGarageDeviceResponse>(ctx, 'AuthedAppApiService', 'GetGarageDevice', request, GetGarageDeviceResponse())
   ;
   $async.Future<AddDeviceIdResponse> addDeviceId($pb.ClientContext? ctx, AddDeviceIdRequest request) =>
     _client.invoke<AddDeviceIdResponse>(ctx, 'AuthedAppApiService', 'AddDeviceId', request, AddDeviceIdResponse())

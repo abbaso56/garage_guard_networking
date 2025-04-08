@@ -61,9 +61,6 @@ const (
 	// AuthedAppApiServiceGetCarsInGarageProcedure is the fully-qualified name of the
 	// AuthedAppApiService's GetCarsInGarage RPC.
 	AuthedAppApiServiceGetCarsInGarageProcedure = "/app_api_service.v1.AuthedAppApiService/GetCarsInGarage"
-	// AuthedAppApiServiceGetGarageDeviceProcedure is the fully-qualified name of the
-	// AuthedAppApiService's GetGarageDevice RPC.
-	AuthedAppApiServiceGetGarageDeviceProcedure = "/app_api_service.v1.AuthedAppApiService/GetGarageDevice"
 	// AuthedAppApiServiceAddDeviceIdProcedure is the fully-qualified name of the AuthedAppApiService's
 	// AddDeviceId RPC.
 	AuthedAppApiServiceAddDeviceIdProcedure = "/app_api_service.v1.AuthedAppApiService/AddDeviceId"
@@ -215,8 +212,6 @@ type AuthedAppApiServiceClient interface {
 	UpdateGestureSeq(context.Context, *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error)
 	// Get cars registered to a garage
 	GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error)
-	// Get device id form garage
-	GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error)
 	// Adds device id
 	AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error)
 	// Add garage id
@@ -270,12 +265,6 @@ func NewAuthedAppApiServiceClient(httpClient connect.HTTPClient, baseURL string,
 			connect.WithSchema(authedAppApiServiceMethods.ByName("GetCarsInGarage")),
 			connect.WithClientOptions(opts...),
 		),
-		getGarageDevice: connect.NewClient[v1.GetGarageDeviceRequest, v1.GetGarageDeviceResponse](
-			httpClient,
-			baseURL+AuthedAppApiServiceGetGarageDeviceProcedure,
-			connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageDevice")),
-			connect.WithClientOptions(opts...),
-		),
 		addDeviceId: connect.NewClient[v1.AddDeviceIdRequest, v1.AddDeviceIdResponse](
 			httpClient,
 			baseURL+AuthedAppApiServiceAddDeviceIdProcedure,
@@ -299,7 +288,6 @@ type authedAppApiServiceClient struct {
 	addNewCar           *connect.Client[v1.AddNewCarRequest, v1.AddNewCarResponse]
 	updateGestureSeq    *connect.Client[v1.UpdateGestureSeqRequest, v1.UpdateGestureSeqResponse]
 	getCarsInGarage     *connect.Client[v1.GetCarsInGarageRequest, v1.GetCarsInGarageResponse]
-	getGarageDevice     *connect.Client[v1.GetGarageDeviceRequest, v1.GetGarageDeviceResponse]
 	addDeviceId         *connect.Client[v1.AddDeviceIdRequest, v1.AddDeviceIdResponse]
 	addGarageId         *connect.Client[v1.AddGarageIdRequest, v1.AddGarageIdResponse]
 }
@@ -334,11 +322,6 @@ func (c *authedAppApiServiceClient) GetCarsInGarage(ctx context.Context, req *co
 	return c.getCarsInGarage.CallUnary(ctx, req)
 }
 
-// GetGarageDevice calls app_api_service.v1.AuthedAppApiService.GetGarageDevice.
-func (c *authedAppApiServiceClient) GetGarageDevice(ctx context.Context, req *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error) {
-	return c.getGarageDevice.CallUnary(ctx, req)
-}
-
 // AddDeviceId calls app_api_service.v1.AuthedAppApiService.AddDeviceId.
 func (c *authedAppApiServiceClient) AddDeviceId(ctx context.Context, req *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error) {
 	return c.addDeviceId.CallUnary(ctx, req)
@@ -365,8 +348,6 @@ type AuthedAppApiServiceHandler interface {
 	UpdateGestureSeq(context.Context, *connect.Request[v1.UpdateGestureSeqRequest]) (*connect.Response[v1.UpdateGestureSeqResponse], error)
 	// Get cars registered to a garage
 	GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error)
-	// Get device id form garage
-	GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error)
 	// Adds device id
 	AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error)
 	// Add garage id
@@ -416,12 +397,6 @@ func NewAuthedAppApiServiceHandler(svc AuthedAppApiServiceHandler, opts ...conne
 		connect.WithSchema(authedAppApiServiceMethods.ByName("GetCarsInGarage")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authedAppApiServiceGetGarageDeviceHandler := connect.NewUnaryHandler(
-		AuthedAppApiServiceGetGarageDeviceProcedure,
-		svc.GetGarageDevice,
-		connect.WithSchema(authedAppApiServiceMethods.ByName("GetGarageDevice")),
-		connect.WithHandlerOptions(opts...),
-	)
 	authedAppApiServiceAddDeviceIdHandler := connect.NewUnaryHandler(
 		AuthedAppApiServiceAddDeviceIdProcedure,
 		svc.AddDeviceId,
@@ -448,8 +423,6 @@ func NewAuthedAppApiServiceHandler(svc AuthedAppApiServiceHandler, opts ...conne
 			authedAppApiServiceUpdateGestureSeqHandler.ServeHTTP(w, r)
 		case AuthedAppApiServiceGetCarsInGarageProcedure:
 			authedAppApiServiceGetCarsInGarageHandler.ServeHTTP(w, r)
-		case AuthedAppApiServiceGetGarageDeviceProcedure:
-			authedAppApiServiceGetGarageDeviceHandler.ServeHTTP(w, r)
 		case AuthedAppApiServiceAddDeviceIdProcedure:
 			authedAppApiServiceAddDeviceIdHandler.ServeHTTP(w, r)
 		case AuthedAppApiServiceAddGarageIdProcedure:
@@ -485,10 +458,6 @@ func (UnimplementedAuthedAppApiServiceHandler) UpdateGestureSeq(context.Context,
 
 func (UnimplementedAuthedAppApiServiceHandler) GetCarsInGarage(context.Context, *connect.Request[v1.GetCarsInGarageRequest]) (*connect.Response[v1.GetCarsInGarageResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.GetCarsInGarage is not implemented"))
-}
-
-func (UnimplementedAuthedAppApiServiceHandler) GetGarageDevice(context.Context, *connect.Request[v1.GetGarageDeviceRequest]) (*connect.Response[v1.GetGarageDeviceResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("app_api_service.v1.AuthedAppApiService.GetGarageDevice is not implemented"))
 }
 
 func (UnimplementedAuthedAppApiServiceHandler) AddDeviceId(context.Context, *connect.Request[v1.AddDeviceIdRequest]) (*connect.Response[v1.AddDeviceIdResponse], error) {

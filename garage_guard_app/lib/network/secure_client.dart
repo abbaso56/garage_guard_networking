@@ -10,7 +10,7 @@ Future<HttpClient> secureClient () async{
   final ctx= SecurityContext.defaultContext;
 
   final  ca = await rootBundle.load('assets/rootCA.crt');
-  final  srv = await rootBundle.load('assets/srv.crt');
+  final  srv = await rootBundle.load('assets/srv_out.crt');
 
   ctx.setTrustedCertificatesBytes(ca.buffer.asUint8List());
   ctx.useCertificateChainBytes(srv.buffer.asUint8List());

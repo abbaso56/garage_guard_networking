@@ -40,3 +40,17 @@ class NetworkGetGarageByGarageId extends NetworkEvent{
   final String id;
   NetworkGetGarageByGarageId({required this.id});
 }
+
+
+class NetworkGetCarsInGarage extends NetworkEvent{
+  final String garageId;
+  NetworkGetCarsInGarage({required this.garageId});
+}
+
+
+class NetworkAddCar extends NetworkEvent{
+  final String garageId;
+  final String liscense;
+  NetworkAddCar({required this.garageId, required this.liscense});
+
+}

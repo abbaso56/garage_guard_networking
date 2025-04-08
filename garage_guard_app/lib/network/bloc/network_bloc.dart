@@ -166,7 +166,8 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
 
 
       final resp = await req;
-      emit(NetworkGetGaragesResponseState(garages: resp.garages));
+      networkRepo.homePageChange(resp.garages);
+      emit(NetworkGetGaragesResponseState());
       emit(NetworkLoggedInState());
      
 
@@ -200,6 +201,31 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       emit(NetworkGetGarageByGarageIdResponseState( garageInfo: resp.garage));
       emit(NetworkLoggedInState());
       
+
+    });
+
+    on<NetworkGetCarsInGarage>((event, emit) async{
+      final req = networkRepo.authedAppClient!.getCarsInGarage(GetCarsInGarageRequest(garageId: event.garageId));
+      emit(NetworkGetCarsInGarageRequestState());
+
+      final resp = await req;
+      
+      networkRepo.cars = resp.licensePlate;
+
+
+
+      emit(NetworkGetCarsInGarageResponseState());
+      emit(NetworkLoggedInState());
+    });
+
+    on<NetworkAddCar>((event, emit) async{
+      final req = networkRepo.authedAppClient!.addNewCar(AddNewCarRequest(garageId: event.garageId, licensePlate: event.liscense));
+      emit(NetworkAddCarRequestState());
+
+      await req;
+
+      emit(NetworkAddCarResponseState());
+      emit(NetworkLoggedInState());
 
     });
 

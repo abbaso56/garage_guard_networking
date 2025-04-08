@@ -6,6 +6,7 @@ import (
 	garageApiServicesv1 "garage_guard/proto/gen/garage_api_services/v1"
 	"garage_guard/proto/gen/garage_api_services/v1/garageApiServicesv1connect"
 	"garage_guard/sql/db"
+	"log"
 
 	"connectrpc.com/connect"
 	"github.com/google/uuid"
@@ -20,6 +21,7 @@ type GEntryHandler struct {
 }
 
 func (gEntryHandler *GEntryHandler) LicensePlateCheck(ctx context.Context, req *connect.Request[garageApiServicesv1.LicensePlateCheckRequest]) (*connect.Response[garageApiServicesv1.LicensePlateCheckResponse], error) {
+	log.Println("LicensePlateCheck called")
 	// Get garageId and deviceId from the request
 	garageId := req.Msg.GarageId
 	deviceId := req.Msg.DeviceId
@@ -54,6 +56,7 @@ func (gEntryHandler *GEntryHandler) LicensePlateCheck(ctx context.Context, req *
 }
 
 func (gEntryHandler *GEntryHandler) GestureSeqCheck(ctx context.Context, req *connect.Request[garageApiServicesv1.GestureSeqCheckRequest]) (*connect.Response[garageApiServicesv1.GestureSeqCheckResponse], error) {
+	log.Println("GestureSeqCheck called")
 	// Get garageId and deviceId from the request
 	garageId := req.Msg.GarageId
 	deviceId := req.Msg.DeviceId
@@ -80,6 +83,7 @@ func (gEntryHandler *GEntryHandler) GestureSeqCheck(ctx context.Context, req *co
 }
 
 func (gEntryHandler *GEntryHandler) UserIdCheck(ctx context.Context, req *connect.Request[garageApiServicesv1.UserIdCheckRequest]) (*connect.Response[garageApiServicesv1.UserIdCheckResponse], error) {
+	log.Println("UserIdCheck called")
 	// Get garageId and deviceId from the request
 	garageId := req.Msg.GarageId
 	deviceId := req.Msg.DeviceId

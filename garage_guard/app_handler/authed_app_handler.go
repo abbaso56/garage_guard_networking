@@ -2,6 +2,7 @@ package apphandler
 
 import (
 	"context"
+	"errors"
 	"garage_guard/helpers"
 	appApiServicev1 "garage_guard/proto/gen/app_api_service/v1"
 	appApiServicev1connect "garage_guard/proto/gen/app_api_service/v1/appApiServicev1connect"
@@ -106,8 +107,10 @@ func (appSrv *AuthedAppHandler) GetGarages(ctx context.Context, req *connect.Req
 	garages := make([]*appApiServicev1.Garage, len(garageData))
 
 	for i, g := range garageData {
-		garages[i].GarageName = g.GarageName
-		garages[i].Id = string(g.ID.Bytes[:])
+		garages[i] = &appApiServicev1.Garage{
+			GarageName: g.GarageName,
+			Id:         uuid.UUID(g.ID.Bytes).String(),
+		}
 	}
 
 	resp := connect.NewResponse(&appApiServicev1.GetGaragesResponse{
@@ -133,7 +136,7 @@ func (appSrv *AuthedAppHandler) GetGarageByGarageID(ctx context.Context, req *co
 	// check if these fields are null
 	deviceID := ""
 	if garageData.DeviceID.Valid {
-		deviceID = string(garageData.DeviceID.Bytes[:])
+		deviceID = uuid.UUID(garageData.DeviceID.Bytes).String()
 	}
 
 	gestureSeq := ""
@@ -148,7 +151,7 @@ func (appSrv *AuthedAppHandler) GetGarageByGarageID(ctx context.Context, req *co
 	// Create and send the response
 	resp := connect.NewResponse(&appApiServicev1.GetGarageByGarageIdResponse{
 		Garage: &appApiServicev1.GarageInfo{
-			Id:         string(garageData.ID.Bytes[:]),
+			Id:         uuid.UUID(garageData.ID.Bytes).String(),
 			GarageName: garageData.GarageName,
 			DeviceId:   deviceID,
 			GestureSeq: gestureSeq,
@@ -161,24 +164,246 @@ func (appSrv *AuthedAppHandler) GetGarageByGarageID(ctx context.Context, req *co
 }
 
 func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+	log.Println("AddNewCar called")
+
+	// Get the gargae id and the license plate from the request
+	garageId := req.Msg.GarageId
+	license := req.Msg.LicensePlate
+
+	// data to pg data
+	pgGarage := pgtype.UUID{}
+	err := pgGarage.Scan(garageId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	if license == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("license plate is empty"))
+	}
+
+	// create a new id for the car
+	id := uuid.New()
+	time.Now().UTC()
+
+	//new entry in cars table
+	_, err = appSrv.DataQuery.CreateCar(ctx, db.CreateCarParams{
+		ID:           helpers.PgUuid(id),
+		GarageID:     pgGarage,
+		LicensePlate: license,
+		CreatedAt:    helpers.PgTime(time.Now().UTC()),
+		UpdatedAt:    helpers.PgTime(time.Now().UTC()),
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.AddNewCarResponse{
+		Status: true,
+	})
+
+	return resp, nil
 
 }
-func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+func (appSrv *AuthedAppHandler) UpdateGestureSeq(ctx context.Context, req *connect.Request[appApiServicev1.UpdateGestureSeqRequest]) (*connect.Response[appApiServicev1.UpdateGestureSeqResponse], error) {
+	log.Println("UpdateGestureSeq called")
 
+	// Get the garage id and the gesture sequence from the request
+	garageId := req.Msg.GarageId
+	gestureSeq := req.Msg.GestureSeq
+
+	// garageId to pg UUID
+	pgGarage := pgtype.UUID{}
+	err := pgGarage.Scan(garageId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	if gestureSeq == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("gesture sequence is empty"))
+	}
+
+	// gestureSeq to pg text
+	pgGestureSeq := pgtype.Text{
+		String: gestureSeq,
+	}
+
+	// Update gesture sequence for garage
+	_, err = appSrv.DataQuery.UpdateGestureSeq(ctx, db.UpdateGestureSeqParams{
+		ID:         pgGarage,
+		GestureSeq: pgGestureSeq,
+	})
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.UpdateGestureSeqResponse{
+		Status: true,
+	})
+
+	return resp, nil
 }
 
-func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+func (appSrv *AuthedAppHandler) GetCarsInGarage(ctx context.Context, req *connect.Request[appApiServicev1.GetCarsInGarageRequest]) (*connect.Response[appApiServicev1.GetCarsInGarageResponse], error) {
+	log.Println("GetCarsInGarage called")
 
+	// Get the garage id from the request
+	garageId := req.Msg.GarageId
+
+	// Id to pg UUID... you get. I've done the the same thing like a billion times now
+	pgGarage := pgtype.UUID{}
+	err := pgGarage.Scan(garageId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	// Check if the garage excists
+	_, err = appSrv.DataQuery.GetGarageById(ctx, pgGarage)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("garage does not exist"))
+	}
+
+	// Get the cars in the garage
+	cars, err := appSrv.DataQuery.GetCarsByGarageId(ctx, pgGarage)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// slice if sting to store car license plates
+	licenses := make([]string, len(cars))
+
+	for i, car := range cars {
+		licenses[i] = car.LicensePlate
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.GetCarsInGarageResponse{
+		LicensePlate: licenses,
+	})
+
+	return resp, nil
 }
 
-func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+func (appSrv *AuthedAppHandler) AddDeviceId(ctx context.Context, req *connect.Request[appApiServicev1.AddDeviceIdRequest]) (*connect.Response[appApiServicev1.AddDeviceIdResponse], error) {
+	log.Println("AddDeviceId called")
 
+	// Get the garage id and the device id
+	garageId := req.Msg.GarageId
+	deviceId := req.Msg.DeviceId
+
+	// ids to pg
+	pgGarage := pgtype.UUID{}
+	err := pgGarage.Scan(garageId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	pgDevice := pgtype.UUID{}
+	err = pgDevice.Scan(deviceId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	// Check if the garage exists
+
+	_, err = appSrv.DataQuery.GetCarsByGarageId(ctx, pgGarage)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("garage does not exist"))
+	}
+	// time for update
+	timeNow := time.Now().UTC()
+
+	// add the device id to the garage
+	_, err = appSrv.DataQuery.UpdateGarageDevice(ctx, db.UpdateGarageDeviceParams{
+		ID:        pgGarage,
+		DeviceID:  pgDevice,
+		UpdatedAt: helpers.PgTime(timeNow),
+	})
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	resp := connect.NewResponse(&appApiServicev1.AddDeviceIdResponse{
+		Status: true,
+	})
+
+	return resp, nil
 }
 
-func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+func (appSrv *AuthedAppHandler) AddGarageId(ctx context.Context, req *connect.Request[appApiServicev1.AddGarageIdRequest]) (*connect.Response[appApiServicev1.AddGarageIdResponse], error) {
+	log.Println("AddGarageId called")
 
-}
+	// Get the garage id and the user id
+	garageId := req.Msg.GarageId
+	userId := req.Msg.UserId
 
-func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Request[appApiServicev1.AddNewCarRequest]) (*connect.Response[appApiServicev1.AddNewCarResponse], error) {
+	garageName := req.Msg.GarageName
 
+	// pg stuff
+	pgGarage := pgtype.UUID{}
+	err := pgGarage.Scan(garageId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	pgUser := pgtype.UUID{}
+	err = pgUser.Scan(userId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	// Check if the garage exits (through garage id. currently allowing garage names to be whatever including duplicates)
+	_, err = appSrv.DataQuery.GetGarageById(ctx, pgGarage)
+	if err != pgx.ErrNoRows {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("garage already exists"))
+	}
+
+	// creation/update time
+	time.Now().UTC()
+
+	// Start transaction to add garage to the user
+	tx, err := appSrv.DbConn.Begin(ctx)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	defer tx.Rollback(ctx)
+
+	q := appSrv.DataQuery.WithTx(tx)
+
+	// Create the garage entry
+	_, err = q.CreateGarage(ctx, db.CreateGarageParams{
+		ID:         pgGarage,
+		GarageName: garageName,
+		DeviceID:   pgtype.UUID{Bytes: [16]byte{}, Valid: false},
+		GestureSeq: pgtype.Text{String: "", Valid: false},
+		CreatedAt:  helpers.PgTime(time.Now().UTC()),
+		UpdatedAt:  helpers.PgTime(time.Now().UTC()),
+		VideoUrl:   pgtype.Text{String: "", Valid: false},
+	})
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// Garage and user relation
+	_, err = q.CreateGargeUserRelation(ctx, db.CreateGargeUserRelationParams{
+		GarageID:  pgGarage,
+		UserID:    pgUser,
+		IsAdmin:   true,
+		CreatedAt: helpers.PgTime(time.Now().UTC()),
+		UpdatedAt: helpers.PgTime(time.Now().UTC()),
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	tx.Commit(ctx)
+
+	// transaction done now the response
+
+	resp := connect.NewResponse(&appApiServicev1.AddGarageIdResponse{
+		Status: true,
+	})
+
+	return resp, nil
 }
