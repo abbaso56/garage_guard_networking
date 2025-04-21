@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/asn1"
 	apphandler "garage_guard/app_handler"
 	garagehandler "garage_guard/garage_handler"
 	"garage_guard/proto/gen/app_api_service/v1/appApiServicev1connect"
@@ -82,10 +83,10 @@ func main() {
 
 	authAppServer := &http.Server{
 		Addr:    ":444",
-		Handler: muxAuth,
+		Handler: certUserIdMiddleware(muxAuth),
 		TLSConfig: &tls.Config{
 			ClientCAs:    caCertPool,
-			ClientAuth:   tls.RequireAnyClientCert,
+			ClientAuth:   tls.RequireAndVerifyClientCert,
 			MinVersion:   tls.VersionTLS13,
 			Certificates: []tls.Certificate{cK},
 		},
@@ -129,29 +130,30 @@ func main() {
 	}
 }
 
-// func corsRules(next http.Handler) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-// 		//allows access form all origins
-// 		w.Header().Set("Access-Control-Allow-Origin", "*")
-
-// 		//allows GET POST PUT DELETE OPTIONS
-// 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-
-// 		//allows all headers
-// 		w.Header().Set("Access-Control-Allow-Headers", "*")
-
-// 		//allows cookies
-// 		w.Header().Set("Access-Control-Allow-Credentials", "true")
-
-// 		if r.Method == "OPTIONS" {
-// 			w.WriteHeader(http.StatusOK)
-
-// 		}
-// 		next.ServeHTTP(w, r)
-// 	})
-// }
-
-// func handlerHealthCheck(w http.ResponseWriter, r *http.Request) {
-// 	w.WriteHeader(http.StatusOK)
-// }
+// Middleware to grab the user id from the cert before it gets lost in the connect rpc void
+func certUserIdMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.TLS == nil {
+			log.Println("r.TLS == nil")
+			next.ServeHTTP(w, r)
+			return
+		}
+		if len(r.TLS.PeerCertificates) == 0 {
+			log.Println("No client certificates")
+			next.ServeHTTP(w, r)
+			return
+		}
+		cert := r.TLS.PeerCertificates[0]
+		oidUserId := asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 88888, 98, 9}
+		userId := ""
+		for _, extension := range cert.Extensions {
+			if extension.Id.Equal(oidUserId) {
+				asn1.Unmarshal(extension.Value, &userId)
+				next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), "userId", userId[len("user_id="):])))
+				return
+			}
+		}
+		next.ServeHTTP(w, r)
+		return
+	})
+}

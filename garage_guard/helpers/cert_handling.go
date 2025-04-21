@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"crypto/rand"
 	"crypto/x509"
+	"crypto/x509/pkix"
+	"encoding/asn1"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"log"
 	"math/big"
 	"os"
@@ -83,11 +86,11 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 		return "", err
 	}
 
-	// userIdField, err := asn1.Marshal(fmt.Sprintf("user_id=%s", user_id.String()))
-	// if err != nil {
-	// 	log.Printf("Error encoding user_id: %v", err)
-	// 	return "", err
-	// }
+	userIdField, err := asn1.Marshal(fmt.Sprintf("user_id=%s", user_id.String()))
+	if err != nil {
+		log.Printf("Error encoding user_id: %v", err)
+		return "", err
+	}
 	// Fillout csr from the app with info that the server has
 
 	csrFilled := &x509.Certificate{
@@ -99,13 +102,13 @@ func CreateClientCert(csrPem string, user_id uuid.UUID) (string, error) {
 		KeyUsage:     x509.KeyUsageDigitalSignature, //I don't think you need to be able to encrypt stuff since the keys are ecdsa so only ds
 
 		// // User id
-		// ExtraExtensions: []pkix.Extension{
-		// 	{
-		// 		Id:       []int{2, 5, 29, 17},
-		// 		Critical: false, // False for now since I'm unsure if the server will reject it otherwise
-		// 		Value:    userIdField,
-		// 	},
-		// },
+		ExtraExtensions: []pkix.Extension{
+			{
+				Id:       []int{1, 3, 6, 1, 4, 1, 88888, 98, 9},
+				Critical: false, // False for now since I'm unsure if the server will reject it otherwise
+				Value:    userIdField,
+			},
+		},
 	}
 
 	cert, err := x509.CreateCertificate(rand.Reader, csrFilled, caCert, csr.PublicKey, caKey)

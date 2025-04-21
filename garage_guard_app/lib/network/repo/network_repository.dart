@@ -16,7 +16,7 @@ import 'package:garage_guard_app/network/gen/app_api_service/v1/app_api_service.
 
 
 class NetworkRepository {
-  static const defUrl = "https://ec2-35-182-96-250.ca-central-1.compute.amazonaws.com";
+  static const defUrl = "https://ec2-3-96-67-120.ca-central-1.compute.amazonaws.com";
   String bUrl = "$defUrl:443"; 
   String connected = "disconnected";
   final HttpClient clientinfo;

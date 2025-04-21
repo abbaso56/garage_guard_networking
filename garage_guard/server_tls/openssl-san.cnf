@@ -11,12 +11,12 @@ ST = Ontario
 L  = Toronto
 O  = Garage Guard
 OU = Garage Guard server
-CN = ec2-35-182-96-250.ca-central-1.compute.amazonaws.com
+CN = ec2-3-96-67-120.ca-central-1.compute.amazonaws.com
 
 [ req_ext ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = ec2-35-182-96-250.ca-central-1.compute.amazonaws.com
-IP.1  = 35.182.96.250
+DNS.1 = ec2-3-96-67-120.ca-central-1.compute.amazonaws.com
+IP.1  = 3.96.67.120
 

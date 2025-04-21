@@ -36,6 +36,14 @@ func (appSrv *AuthedAppHandler) NewGarage(ctx context.Context, req *connect.Requ
 
 	// Gets the user id
 	userId := req.Msg.UserId
+
+	// Check if the user  id matches the certificate
+	certUserId := ctx.Value("userId").(string)
+	if userId != certUserId {
+		log.Println("User Id certificate mismatch")
+		return nil, connect.NewError(connect.CodePermissionDenied, errors.New("user Id certificate mismatch"))
+	}
+
 	pgId := pgtype.UUID{}
 	err := pgId.Scan(userId)
 	if err != nil {
@@ -90,6 +98,15 @@ func (appSrv *AuthedAppHandler) GetGarages(ctx context.Context, req *connect.Req
 
 	//get the user id from the request
 	userId := req.Msg.UserId
+
+	// Check if the user  id matches the certificate
+
+	certUserId := ctx.Value("userId").(string)
+	if userId != certUserId {
+		log.Println("User Id certificate mismatch")
+		return nil, connect.NewError(connect.CodePermissionDenied, errors.New("user Id certificate mismatch"))
+	}
+
 	pgId := pgtype.UUID{}
 	err := pgId.Scan(userId)
 	if err != nil {
@@ -177,6 +194,28 @@ func (appSrv *AuthedAppHandler) AddNewCar(ctx context.Context, req *connect.Requ
 		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
+	// user id to check if the user has access to the garage
+	userId := ctx.Value("userId").(string)
+
+	// User pg id
+	pgId := pgtype.UUID{}
+	err = pgId.Scan(userId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	//check if the garage user relation exists
+	_, err = appSrv.DataQuery.GetGarageUserRelationByIDS(ctx,
+		db.GetGarageUserRelationByIDSParams{
+			GarageID: pgGarage,
+			UserID:   pgId,
+		},
+	)
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("user does not have such a garage"))
+	}
+
 	if license == "" {
 		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("license plate is empty"))
 	}
@@ -218,6 +257,28 @@ func (appSrv *AuthedAppHandler) UpdateGestureSeq(ctx context.Context, req *conne
 		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
+	// user id to check if the user has access to the garage
+	userId := ctx.Value("userId").(string)
+
+	// User pg id
+	pgId := pgtype.UUID{}
+	err = pgId.Scan(userId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	//check if the garage user relation exists
+	_, err = appSrv.DataQuery.GetGarageUserRelationByIDS(ctx,
+		db.GetGarageUserRelationByIDSParams{
+			GarageID: pgGarage,
+			UserID:   pgId,
+		},
+	)
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("user does not have such a garage"))
+	}
+
 	if gestureSeq == "" {
 		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("gesture sequence is empty"))
 	}
@@ -257,10 +318,26 @@ func (appSrv *AuthedAppHandler) GetCarsInGarage(ctx context.Context, req *connec
 		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	// Check if the garage excists
-	_, err = appSrv.DataQuery.GetGarageById(ctx, pgGarage)
+	// user id to check if the user has access to the garage
+	userId := ctx.Value("userId").(string)
+
+	// User pg id
+	pgId := pgtype.UUID{}
+	err = pgId.Scan(userId)
 	if err != nil {
-		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("garage does not exist"))
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	//check if the garage user relation exists
+	_, err = appSrv.DataQuery.GetGarageUserRelationByIDS(ctx,
+		db.GetGarageUserRelationByIDSParams{
+			GarageID: pgGarage,
+			UserID:   pgId,
+		},
+	)
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("user does not have such a garage"))
 	}
 
 	// Get the cars in the garage
@@ -303,12 +380,28 @@ func (appSrv *AuthedAppHandler) AddDeviceId(ctx context.Context, req *connect.Re
 		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	// Check if the garage exists
+	// user id to check if the user has access to the garage
+	userId := ctx.Value("userId").(string)
 
-	_, err = appSrv.DataQuery.GetCarsByGarageId(ctx, pgGarage)
+	// User pg id
+	pgId := pgtype.UUID{}
+	err = pgId.Scan(userId)
 	if err != nil {
-		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("garage does not exist"))
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
+
+	//check if the garage user relation exists
+	_, err = appSrv.DataQuery.GetGarageUserRelationByIDS(ctx,
+		db.GetGarageUserRelationByIDSParams{
+			GarageID: pgGarage,
+			UserID:   pgId,
+		},
+	)
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("user does not have such a garage"))
+	}
+
 	// time for update
 	timeNow := time.Now().UTC()
 
@@ -336,6 +429,13 @@ func (appSrv *AuthedAppHandler) AddGarageId(ctx context.Context, req *connect.Re
 	// Get the garage id and the user id
 	garageId := req.Msg.GarageId
 	userId := req.Msg.UserId
+
+	// Check if the user  id matches the certificate
+	certUserId := ctx.Value("userId").(string)
+	if userId != certUserId {
+		log.Println("User Id certificate mismatch")
+		return nil, connect.NewError(connect.CodePermissionDenied, errors.New("user Id certificate mismatch"))
+	}
 
 	garageName := req.Msg.GarageName
 
